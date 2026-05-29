@@ -118,9 +118,7 @@ def nvidia_chat(model, messages, temperature=0.2, max_tokens=512):
             'messages': messages,
             'max_tokens': max_tokens,
             'temperature': temperature,
-            'top_p': 0.70,
-            'frequency_penalty': 0.00,
-            'presence_penalty': 0.00,
+            'top_p': 1.0,
             'stream': False,
         }
         headers = {
@@ -135,7 +133,7 @@ def nvidia_chat(model, messages, temperature=0.2, max_tokens=512):
 
     except requests.exceptions.HTTPError as e:
         status = e.response.status_code
-        body = e.response.text[:300]
+        body = e.response.text[:500]
         print(f'[LUCID] HTTP {status}: {body}')
         if status == 403:
             return f'[Your API key lacks access to "{model}".]', None
@@ -143,10 +141,10 @@ def nvidia_chat(model, messages, temperature=0.2, max_tokens=512):
             return f'[Model "{model}" not found.]', None
         if status in (429, 402):
             return '[API rate limited. Check NVIDIA billing.]', None
-        return f'[AI service error (HTTP {status}).]', None
+        return f'[AI service error (HTTP {status}): {body[:200]}]', None
     except Exception as e:
         print(f'[LUCID] Error: {e}')
-        return f'[AI service error.]', None
+        return f'[AI service error: {e}]', None
 
 
 def login_required(f):
