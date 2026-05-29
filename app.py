@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import random
 import threading
@@ -182,6 +183,130 @@ def save_chat_to_file(user_id, personality, messages):
     return filepath
 
 
+MEMORIES_DIR = os.path.join(os.path.dirname(__file__), 'memories')
+os.makedirs(MEMORIES_DIR, exist_ok=True)
+
+STOP_WORDS = {
+    'the','a','an','is','are','was','were','be','been','being','have','has','had',
+    'do','does','did','will','would','could','should','may','might','shall','can',
+    'to','of','in','for','on','with','at','by','from','this','that','these','those',
+    'it','its','you','your','i','me','my','we','our','they','them','their','he','she',
+    'and','or','but','so','if','not','no','just','like','really','very','much',
+    'about','what','when','where','who','how','all','some','any','up','down','out',
+    'got','get','got','did','been','being','than','then','now',
+}
+
+_memory_idx_lock = threading.Lock()
+
+
+def extract_keywords(text, max_words=8):
+    words = re.findall(r'\b[a-zA-Z]{3,}\b', text.lower())
+    return [w for w in words if w not in STOP_WORDS][:max_words]
+
+
+def extract_memories_from_messages(messages, personality='unknown'):
+    memories = []
+    impression_patterns = re.compile(
+        r'\b(i\s+(?:feel|felt|am|was|miss|hate|love|want|need|wish|hope|fear|'
+        r'afraid|struggl|suffer|scared|anxious|depressed|lonely|tired|exhausted|'
+        r'broken|think|believe|realiz|understand|know|remember|dream|wonder|'
+        r'plan|aspire|will|won\'t|can\'t|cannot))\b',
+        re.IGNORECASE,
+    )
+    for i in range(len(messages) - 1):
+        msg = messages[i]
+        if msg.get('role') != 'user':
+            continue
+        user_text = msg.get('content', '')
+        ai_text = messages[i + 1].get('content', '') if i + 1 < len(messages) else ''
+        match = impression_patterns.search(user_text)
+        if not match:
+            continue
+        sentences = re.split(r'[.!?]+', user_text)
+        matched_sentence = ''
+        for s in sentences:
+            if match.group(0).lower() in s.lower():
+                matched_sentence = s.strip()
+                break
+        if not matched_sentence:
+            matched_sentence = user_text[:200]
+        mem_type = 'emotion'
+        w = match.group(1).lower()
+        if any(t in w for t in ('want','wish','hope','need','dream','plan','aspire')):
+            mem_type = 'desire'
+        elif any(t in w for t in ('think','believe','realiz','understand','know','remember','wonder')):
+            mem_type = 'thought'
+        memories.append({
+            'type': mem_type,
+            'content': matched_sentence,
+            'response': ai_text[:300] if ai_text else '',
+            'personality': personality,
+            'timestamp': msg.get('timestamp', datetime.now().isoformat()),
+            'keywords': extract_keywords(matched_sentence),
+        })
+    return memories
+
+
+def get_memory_path(user_id):
+    safe = user_id.replace(' ', '_').replace('/', '_')[:30]
+    return os.path.join(MEMORIES_DIR, f'{safe}.json')
+
+
+def load_memories(user_id):
+    path = get_memory_path(user_id)
+    if os.path.exists(path):
+        with open(path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return []
+
+
+def save_memories(user_id, memories):
+    path = get_memory_path(user_id)
+    with _memory_idx_lock:
+        with open(path, 'w', encoding='utf-8') as f:
+            json.dump(memories, f, indent=2, ensure_ascii=False)
+
+
+def merge_memories(existing, new_entries, max_total=200):
+    seen = set()
+    combined = []
+    for mem in existing + new_entries:
+        key = (mem.get('content', '')[:80], mem.get('type', ''))
+        if key not in seen:
+            seen.add(key)
+            combined.append(mem)
+    return combined[:max_total]
+
+
+def get_relevant_memories(user_id, query, max_results=5):
+    if not query:
+        return []
+    memories = load_memories(user_id)
+    if not memories:
+        return []
+    query_keywords = set(extract_keywords(query, max_words=12))
+    if not query_keywords:
+        return memories[:max_results]
+    scored = []
+    for mem in memories:
+        kw = set(mem.get('keywords', []))
+        overlap = len(query_keywords & kw)
+        if overlap > 0:
+            scored.append((overlap, mem))
+    scored.sort(key=lambda x: -x[0])
+    return [m for _, m in scored[:max_results]]
+
+
+def build_memory_context(user_id, user_message):
+    relevant = get_relevant_memories(user_id, user_message)
+    if not relevant:
+        return ''
+    lines = ['\n## MEMORIES FROM PAST CONVERSATIONS:']
+    for mem in relevant:
+        lines.append(f'- [{mem.get("type","note").upper()}] {mem["content"]}')
+    return '\n'.join(lines)
+
+
 @app.route('/')
 @login_required
 def index():
@@ -203,11 +328,20 @@ def logout():
     user_id = session.get('user_id')
     if user_id:
         chats = get_user_chats(user_id)
+        all_new_memories = []
         with store_lock:
             for personality, messages in chats.items():
                 if messages:
                     save_chat_to_file(user_id, personality, messages)
+                if messages and not personality.startswith('_'):
+                    all_new_memories.extend(
+                        extract_memories_from_messages(messages, personality)
+                    )
             chat_store.pop(user_id, None)
+        if all_new_memories:
+            existing = load_memories(user_id)
+            existing = merge_memories(existing, all_new_memories)
+            save_memories(user_id, existing)
     session.clear()
     return redirect(url_for('login'))
 
@@ -246,7 +380,9 @@ def api_chat():
 
     history = chats[personality]
 
-    messages = [{'role': 'system', 'content': p['system_prompt']}]
+    memory_block = build_memory_context(user_id, message)
+    system_prompt = p['system_prompt'] + memory_block
+    messages = [{'role': 'system', 'content': system_prompt}]
     for msg in history[-20:]:
         messages.append({'role': msg['role'], 'content': msg['content']})
     messages.append({'role': 'user', 'content': message})
@@ -320,9 +456,13 @@ def generate_group_responses(seed_message, history=None):
     responses = []
     history = history or []
 
+    # Inject memories for the group (uses the special _group personality key)
+    user_id = session.get('user_id', '')
+    memory_block = build_memory_context(user_id, seed_message)
+
     def _call(personality_id, system_extra, context_extras=None):
         p = PERSONALITIES[personality_id]
-        system = p['system_prompt'] + '\n\n' + system_extra
+        system = p['system_prompt'] + '\n\n' + system_extra + memory_block
         msgs = [{'role': 'system', 'content': system}]
         for h in history[-6:]:
             msgs.append({'role': 'assistant', 'content': h})
@@ -451,11 +591,38 @@ def api_save_session():
     user_id = session['user_id']
     chats = get_user_chats(user_id)
     saved = []
+    all_new_memories = []
     for personality, messages in chats.items():
         if messages:
             fpath = save_chat_to_file(user_id, personality, messages)
             saved.append(os.path.basename(fpath))
+        if messages and not personality.startswith('_'):
+            all_new_memories.extend(
+                extract_memories_from_messages(messages, personality)
+            )
+    if all_new_memories:
+        existing = load_memories(user_id)
+        existing = merge_memories(existing, all_new_memories)
+        save_memories(user_id, existing)
     return jsonify({'saved': saved})
+
+
+@app.route('/api/memories', methods=['GET'])
+@login_required
+def api_get_memories():
+    user_id = session['user_id']
+    memories = load_memories(user_id)
+    return jsonify({'memories': memories, 'count': len(memories)})
+
+
+@app.route('/api/memories', methods=['DELETE'])
+@login_required
+def api_delete_memories():
+    user_id = session['user_id']
+    path = get_memory_path(user_id)
+    if os.path.exists(path):
+        os.remove(path)
+    return jsonify({'status': 'memories deleted'})
 
 
 @app.route('/api/session/clear', methods=['POST'])

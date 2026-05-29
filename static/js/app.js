@@ -244,6 +244,7 @@ function backToHome() {
   document.getElementById('homeScreen').style.display = 'flex';
   document.getElementById('chatView').style.display = 'none';
   document.getElementById('groupChatView').style.display = 'none';
+  document.getElementById('memoriesView').style.display = 'none';
   hideEmotionBadge();
   hidePanicMode();
   updateSidebarActive(null);
@@ -253,8 +254,10 @@ function showView(view) {
   document.getElementById('homeScreen').style.display = 'none';
   document.getElementById('chatView').style.display = 'none';
   document.getElementById('groupChatView').style.display = 'none';
+  document.getElementById('memoriesView').style.display = 'none';
   if (view === 'chat') document.getElementById('chatView').style.display = 'flex';
   else if (view === 'group') document.getElementById('groupChatView').style.display = 'flex';
+  else if (view === 'memories') document.getElementById('memoriesView').style.display = 'flex';
 }
 
 function updateSidebarActive(id) {
@@ -572,4 +575,53 @@ function escapeHtml(text) {
   const div = document.createElement('div');
   div.textContent = text;
   return div.innerHTML;
+}
+
+// ── Memories ──
+
+function showMemories() {
+  showView('memories');
+  updateSidebarActive(null);
+  const list = document.getElementById('memoriesList');
+  list.innerHTML = '<div style="text-align:center;padding:2rem;color:rgba(255,255,255,0.3)">Loading memories...</div>';
+  fetch('/api/memories')
+    .then(r => r.json())
+    .then(data => {
+      list.innerHTML = '';
+      if (data.count === 0) {
+        list.innerHTML = '<div style="text-align:center;padding:2rem;color:rgba(255,255,255,0.3)">// No memories yet. Save a session to create memories.</div>';
+        return;
+      }
+      data.memories.forEach(mem => {
+        const colors = { emotion: '#ff69b4', desire: '#00d4ff', thought: '#bb86fc' };
+        const c = colors[mem.type] || '#00d4ff';
+        const labels = { emotion: 'FEELING', desire: 'DESIRE', thought: 'THOUGHT' };
+        const label = labels[mem.type] || 'NOTE';
+        const div = document.createElement('div');
+        div.className = 'memory-card glass';
+        div.style.cssText = `border-left:3px solid ${c};padding:0.8rem 1rem;margin:0.5rem 1rem;border-radius:0.5rem;`;
+        div.innerHTML = `
+          <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.3rem;">
+            <span style="font-size:0.55rem;font-family:'Orbitron',sans-serif;letter-spacing:0.1em;color:${c}">${label}</span>
+            <span style="font-size:0.55rem;color:rgba(255,255,255,0.2)">|</span>
+            <span style="font-size:0.55rem;color:${personalities[mem.personality] ? personalities[mem.personality].color : 'rgba(255,255,255,0.3)'}">${mem.personality}</span>
+          </div>
+          <div style="font-size:0.85rem;color:rgba(255,255,255,0.8);margin-bottom:0.3rem;">${escapeHtml(mem.content)}</div>
+          ${mem.response ? `<div style="font-size:0.75rem;color:rgba(255,255,255,0.4);border-top:1px solid rgba(255,255,255,0.05);padding-top:0.3rem;margin-top:0.3rem;">→ ${escapeHtml(mem.response)}</div>` : ''}
+        `;
+        list.appendChild(div);
+      });
+    })
+    .catch(() => {
+      list.innerHTML = '<div style="text-align:center;padding:2rem;color:#ff0040">Error loading memories.</div>';
+    });
+}
+
+function deleteAllMemories() {
+  if (!confirm('Delete all stored memories? The AIs will forget everything about you.')) return;
+  fetch('/api/memories', { method: 'DELETE' })
+    .then(r => r.json())
+    .then(() => {
+      document.getElementById('memoriesList').innerHTML = '<div style="text-align:center;padding:2rem;color:rgba(255,255,255,0.3)">// All memories deleted.</div>';
+    });
 }
