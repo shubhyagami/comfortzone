@@ -109,6 +109,19 @@ store_lock = threading.Lock()
 
 INVOKE_URL = 'https://integrate.api.nvidia.com/v1/chat/completions'
 
+def _prep_messages(messages):
+    """Prepend system prompt into first user message for models that reject system role."""
+    out = []
+    sys_block = ''
+    for m in messages:
+        if m['role'] == 'system':
+            sys_block += m['content'].strip() + '\n\n'
+        else:
+            out.append(dict(m))
+    if sys_block and out:
+        out[0]['content'] = sys_block.strip() + '\n\n###\n\n' + out[0]['content']
+    return out or messages
+
 def nvidia_chat(model, messages, temperature=0.2, max_tokens=512):
     if not NVIDIA_API_KEY:
         print('[LUCID] ERROR: NVIDIA_API_KEY not set in .env file')
@@ -116,10 +129,12 @@ def nvidia_chat(model, messages, temperature=0.2, max_tokens=512):
     try:
         payload = {
             'model': model,
-            'messages': messages,
+            'messages': _prep_messages(messages),
             'max_tokens': max_tokens,
             'temperature': temperature,
-            'top_p': 1.0,
+            'top_p': 0.70,
+            'frequency_penalty': 0.0,
+            'presence_penalty': 0.0,
             'stream': False,
         }
         headers = {
@@ -137,15 +152,15 @@ def nvidia_chat(model, messages, temperature=0.2, max_tokens=512):
         body = e.response.text[:500]
         print(f'[LUCID] HTTP {status}: {body}')
         if status == 403:
-            return f'[Your API key lacks access to "{model}".]', None
+            return f'[API key lacks access to "{model}".]', None
         if status == 404:
             return f'[Model "{model}" not found.]', None
         if status in (429, 402):
             return '[API rate limited. Check NVIDIA billing.]', None
-        return f'[AI service error (HTTP {status}): {body[:200]}]', None
+        return f'[Error: {body[:200]}]', None
     except Exception as e:
         print(f'[LUCID] Error: {e}')
-        return f'[AI service error: {e}]', None
+        return f'[AI error: {e}]', None
 
 
 def login_required(f):
