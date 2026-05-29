@@ -110,24 +110,41 @@ store_lock = threading.Lock()
 INVOKE_URL = 'https://integrate.api.nvidia.com/v1/chat/completions'
 
 def _prep_messages(messages):
-    """Merge system into first user message & collapse consecutive same-role messages."""
-    out = []
+    """Merge system into first user msg, collapse consecutive same roles, insert placeholders."""
     sys_block = ''
+    rest = []
     for m in messages:
         if m['role'] == 'system':
             sys_block += m['content'].strip() + '\n\n'
         else:
-            out.append(dict(m))
-    if sys_block and out:
-        out[0]['content'] = sys_block.strip() + '\n\n###\n\n' + out[0]['content']
-    # Collapse consecutive same-role messages (NV API requires strict alternation)
+            rest.append(dict(m))
+    if sys_block:
+        inserted = False
+        for m in rest:
+            if m['role'] == 'user' and not inserted:
+                m['content'] = '<|system|>\n' + sys_block.strip() + '\n<|end|>\n\n' + m['content']
+                inserted = True
+                break
+        if not inserted:
+            rest.insert(0, {'role': 'user', 'content': '<|system|>\n' + sys_block.strip() + '\n<|end|>'})
+    # Collapse consecutive same-role messages
     collapsed = []
-    for m in out:
+    for m in rest:
         if collapsed and collapsed[-1]['role'] == m['role']:
             collapsed[-1]['content'] += '\n\n' + m['content']
         else:
             collapsed.append(m)
-    return collapsed or messages
+    # Insert placeholders to enforce strict alternation
+    fixed = []
+    for m in collapsed:
+        if fixed and fixed[-1]['role'] == m['role']:
+            gap = {'role': 'assistant' if m['role'] == 'user' else 'user', 'content': '.'}
+            fixed.append(gap)
+        fixed.append(m)
+    # Some models (Gemma) require first message to be user
+    if fixed and fixed[0]['role'] != 'user':
+        fixed.insert(0, {'role': 'user', 'content': '.'})
+    return fixed or messages
 
 def nvidia_chat(model, messages, temperature=0.2, max_tokens=512):
     if not NVIDIA_API_KEY:
@@ -150,7 +167,7 @@ def nvidia_chat(model, messages, temperature=0.2, max_tokens=512):
             'Authorization': f'Bearer {NVIDIA_API_KEY}',
             'Accept': 'application/json',
         }
-        resp = requests.post(INVOKE_URL, headers=headers, json=payload, timeout=(10, 120))
+        resp = requests.post(INVOKE_URL, headers=headers, json=payload, timeout=(15, 180))
         resp.raise_for_status()
         data = resp.json()
         full_text = (data['choices'][0]['message']['content'] or '').strip()
