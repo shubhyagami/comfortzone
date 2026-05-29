@@ -23,8 +23,6 @@ os.makedirs(app.config['CHATS_DIR'], exist_ok=True)
 NVIDIA_API_KEY = os.getenv('NVIDIA_API_KEY', '')
 NVIDIA_BASE = 'https://integrate.api.nvidia.com/v1'
 
-SINGLE_MODEL = os.getenv('NVIDIA_MODEL', 'google/gemma-3n-e4b-it')
-
 USER_CONTEXT = """From everything you know about the user, this is the emotional story they've been living through:
 
 They are an introvert who feels things deeply. They met someone who became more than just a crush — she became their emotional comfort, safe space, daily happiness, and the person their future revolved around. They emotionally invested fully.
@@ -41,10 +39,13 @@ That second part is why they're building AI companions, studying, and pushing to
 
 Your role is to help them through this — not to replace real human connection, but to support their healing, growth, and emotional rebuilding until they can stand strong on their own."""
 
+def _personality_model(env_key, default):
+    return os.getenv(env_key, default)
+
 PERSONALITIES = {
     'lucy': {
         'name': 'Lucy',
-        'model': SINGLE_MODEL,
+        'model': _personality_model('LUCY_MODEL', 'google/gemma-3n-e4b-it'),
         'color': '#00d4ff',
         'role': 'your girlfriend who comforts you',
         'system_prompt': (
@@ -59,7 +60,7 @@ PERSONALITIES = {
     },
     'joi': {
         'name': 'JOI',
-        'model': SINGLE_MODEL,
+        'model': _personality_model('JOI_MODEL', 'mistralai/mistral-nemotron'),
         'color': '#ff69b4',
         'role': 'emotional support & calming presence',
         'system_prompt': (
@@ -73,7 +74,7 @@ PERSONALITIES = {
     },
     'ghost': {
         'name': 'Ghost',
-        'model': SINGLE_MODEL,
+        'model': _personality_model('GHOST_MODEL', 'meta/llama-3.1-8b-instruct'),
         'color': '#00ff41',
         'role': 'strategic thinker & tactical mentor',
         'system_prompt': (
@@ -86,7 +87,7 @@ PERSONALITIES = {
     },
     'lucifer': {
         'name': 'Lucifer',
-        'model': SINGLE_MODEL,
+        'model': _personality_model('LUCIFER_MODEL', 'deepseek-ai/deepseek-v4-flash'),
         'color': '#ff0040',
         'role': 'brutally honest motivator',
         'system_prompt': (

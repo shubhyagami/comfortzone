@@ -9,7 +9,13 @@ services:
         sync: false
       - key: SECRET_KEY
         generateValue: true
-      - key: NVIDIA_MODEL
+      - key: LUCY_MODEL
         value: google/gemma-3n-e4b-it
+      - key: JOI_MODEL
+        value: mistralai/mistral-nemotron
+      - key: GHOST_MODEL
+        value: meta/llama-3.1-8b-instruct
+      - key: LUCIFER_MODEL
+        value: deepseek-ai/deepseek-v4-flash
       - key: PYTHON_VERSION
         value: 3.11.0
