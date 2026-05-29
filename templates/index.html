@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PROJECT LUCID</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Inter:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <button id="menuToggle" class="menu-btn" onclick="toggleMobileMenu()">☰</button>
+  <canvas id="particles"></canvas>
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileMenu()"></div>
+  <aside class="sidebar glass" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <div class="logo-icon">L</div>
+        <div class="logo-text">
+          <span class="logo-top">PROJECT</span>
+          <span class="logo-bottom">LUCID</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section-label">COMPANIONS</div>
+    <nav class="personality-list" id="personalityList"></nav>
+
+    <div class="sidebar-section-label">ACTIONS</div>
+    <nav class="action-list">
+      <button class="action-btn" onclick="openGroupChat()">
+        <span class="action-icon">◈</span>
+        <span>Group Chat</span>
+      </button>
+      <button class="action-btn" onclick="saveSession()">
+        <span class="action-icon">◉</span>
+        <span>Save Session</span>
+      </button>
+      <button class="action-btn" onclick="clearSession()">
+        <span class="action-icon">⊗</span>
+        <span>Clear Chat</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-badge">
+        <div class="user-avatar">{{ session.user_id[0]|upper }}</div>
+        <div class="user-info">
+          <div class="user-name">{{ session.user_id }}</div>
+          <div class="user-status">Online</div>
+        </div>
+      </div>
+      <a href="/logout" class="logout-btn">DISCONNECT</a>
+    </div>
+  </aside>
+
+  <main class="main-content" id="mainContent">
+    <div id="homeScreen" class="home-screen">
+      <div class="home-header glass">
+        <h1 class="home-title">PROJECT LUCID</h1>
+        <p class="home-subtitle">// AI Companion Ecosystem v1.0</p>
+      </div>
+      <p class="home-prompt">SELECT A COMPANION TO BEGIN TRANSMISSION</p>
+      <div class="card-grid" id="cardGrid"></div>
+      <button class="group-btn glass" onclick="openGroupChat()">
+        <span>INITIATE GROUP TRANSMISSION</span>
+        <span class="group-icon">◈</span>
+      </button>
+    </div>
+
+    <div id="chatView" class="chat-view" style="display:none">
+      <div class="chat-header glass" id="chatHeader">
+        <button class="back-btn" onclick="backToHome()">←</button>
+        <div class="chat-avatar" id="chatAvatar"></div>
+        <div>
+          <h2 class="chat-name" id="chatName">Lucy</h2>
+          <p class="chat-role" id="chatRole">emotionally intelligent best friend</p>
+        </div>
+      </div>
+
+      <div class="messages-container" id="messagesContainer">
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">◈</div>
+          <div class="empty-line1">> CHANNEL_OPEN</div>
+          <div class="empty-line2">// Send a message to begin transmission</div>
+        </div>
+        <div id="messagesList"></div>
+        <div id="typingIndicator" class="typing-indicator" style="display:none"></div>
+        <div id="messagesEnd"></div>
+      </div>
+
+      <div class="input-area glass">
+        <textarea id="chatInput" rows="1" placeholder="Type a message..." onkeydown="handleInputKey(event)"></textarea>
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="groupChatView" class="chat-view" style="display:none">
+      <div class="chat-header glass">
+        <button class="back-btn" onclick="backToHome()">←</button>
+        <div>
+          <h2 class="chat-name" style="color:#00d4ff">GROUP TRANSMISSION</h2>
+          <div class="group-badges" id="groupBadges"></div>
+        </div>
+        <div class="group-status">
+          <span style="font-size:0.6rem;color:rgba(255,255,255,0.3);font-family:'Orbitron',sans-serif;letter-spacing:0.1em;">ACTIVE</span>
+          <div class="status-dot"></div>
+        </div>
+      </div>
+
+      <div class="messages-container">
+        <div class="empty-state" id="groupEmptyState">
+          <div class="empty-icon" style="font-size:3rem">◈</div>
+          <div class="empty-line1">> ALL_CHANNELS_OPEN</div>
+          <div class="empty-line2">// All four AI companions are listening</div>
+        </div>
+        <div id="groupMessagesList"></div>
+        <div id="groupTypingIndicator" class="typing-indicator" style="display:none"></div>
+        <div id="groupMessagesEnd"></div>
+      </div>
+
+      <div class="input-area glass">
+        <textarea id="groupInput" rows="1" placeholder="Message the group..." onkeydown="handleGroupInputKey(event)"></textarea>
+        <button class="send-btn" onclick="sendGroupMessage()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <div id="panicOverlay" class="panic-overlay" style="display:none">
+    <div class="breathing-container">
+      <div class="breathing-ring" id="breathingRing">
+        <div class="breathing-inner"></div>
+      </div>
+      <div class="breathing-label" id="breathingLabel">Breathe In</div>
+      <div class="breathing-progress">
+        <div class="breathing-bar" id="breathingBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="emotionBadge" class="emotion-badge" style="display:none"></div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

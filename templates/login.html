@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PROJECT LUCID — SIGN IN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .bg-grid {
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .bg-glow {
+      position: fixed; inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(0,212,255,0.06) 0%, transparent 60%);
+    }
+    .glass {
+      background: rgba(18, 18, 26, 0.7);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .container {
+      position: relative; z-index: 10; width: 100%; max-width: 420px; padding: 1rem;
+    }
+    .title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.3em;
+      text-align: center;
+      color: #00d4ff;
+      text-shadow: 0 0 30px rgba(0,212,255,0.3);
+      margin-bottom: 0.5rem;
+    }
+    .subtitle {
+      text-align: center;
+      color: rgba(255,255,255,0.2);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      margin-bottom: 2rem;
+    }
+    .card {
+      padding: 2.5rem 2rem;
+      border-radius: 1.5rem;
+    }
+    label {
+      display: block;
+      color: rgba(255,255,255,0.35);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.5rem;
+    }
+    input {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 0.75rem;
+      padding: 0.85rem 1rem;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.3s;
+      font-family: 'Inter', sans-serif;
+    }
+    input:focus {
+      border-color: rgba(0,212,255,0.3);
+      box-shadow: 0 0 20px rgba(0,212,255,0.08);
+    }
+    .btn {
+      width: 100%;
+      padding: 0.85rem;
+      border: none;
+      border-radius: 0.75rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      cursor: pointer;
+      color: #0a0a0f;
+      font-weight: 600;
+      background: linear-gradient(135deg, #00d4ff, #00a8cc);
+      box-shadow: 0 0 20px rgba(0,212,255,0.25);
+      transition: all 0.3s;
+    }
+    .btn:hover {
+      box-shadow: 0 0 30px rgba(0,212,255,0.4);
+      transform: scale(1.01);
+    }
+    .error { color: #ff0040; font-size: 0.75rem; margin-top: 0.5rem; display: none; }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+  <div class="container">
+    <div class="title">PROJECT LUCID</div>
+    <p class="subtitle">// SIGN IN TO YOUR LUCID</p>
+    <div class="glass card">
+      <form method="POST" action="/login">
+        <div style="margin-bottom: 1.25rem;">
+          <label>USERNAME</label>
+          <input type="text" name="username" placeholder="Enter your username" required autofocus>
+        </div>
+        <button type="submit" class="btn">SIGN IN</button>
+        <p class="error" id="error"></p>
+      </form>
+      <p style="margin-top: 1.25rem; text-align: center; color: rgba(255,255,255,0.15); font-size: 0.65rem; font-family: 'Share Tech Mono', monospace;">
+        No password required. Just a username to identify your sessions.
+      </p>
+    </div>
+  </div>
+  <script>
+    {% if error %}
+    document.getElementById('error').textContent = '{{ error }}';
+    document.getElementById('error').style.display = 'block';
+    {% endif %}
+  </script>
+</body>
+</html>
