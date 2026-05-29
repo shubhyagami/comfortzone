@@ -11,7 +11,7 @@ from flask import (
     session, redirect, url_for
 )
 from dotenv import load_dotenv
-from openai import OpenAI
+import requests
 
 load_dotenv()
 
@@ -23,7 +23,7 @@ os.makedirs(app.config['CHATS_DIR'], exist_ok=True)
 NVIDIA_API_KEY = os.getenv('NVIDIA_API_KEY', '')
 NVIDIA_BASE = 'https://integrate.api.nvidia.com/v1'
 
-SINGLE_MODEL = os.getenv('NVIDIA_MODEL', 'deepseek-ai/deepseek-v4-flash')
+SINGLE_MODEL = os.getenv('NVIDIA_MODEL', 'google/gemma-3n-e4b-it')
 
 USER_CONTEXT = """From everything you know about the user, this is the emotional story they've been living through:
 
@@ -106,45 +106,46 @@ chat_store = {}
 store_lock = threading.Lock()
 
 
-client = OpenAI(
-    base_url='https://integrate.api.nvidia.com/v1',
-    api_key=NVIDIA_API_KEY,
-)
+INVOKE_URL = 'https://integrate.api.nvidia.com/v1/chat/completions'
 
-def nvidia_chat(model, messages, temperature=0.7, max_tokens=1024):
+def nvidia_chat(model, messages, temperature=0.2, max_tokens=512):
     if not NVIDIA_API_KEY:
         print('[LUCID] ERROR: NVIDIA_API_KEY not set in .env file')
         return "[AI service not configured. Set NVIDIA_API_KEY in .env and restart.]", None
     try:
-        kwargs = dict(
-            model=model,
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            top_p=0.95,
-            timeout=60,
-        )
-
-        if 'deepseek' in model:
-            kwargs['extra_body'] = {
-                'chat_template_kwargs': {
-                    'thinking': False,
-                }
-            }
-
-        completion = client.chat.completions.create(**kwargs)
-        full_text = (completion.choices[0].message.content or '').strip()
+        payload = {
+            'model': model,
+            'messages': messages,
+            'max_tokens': max_tokens,
+            'temperature': temperature,
+            'top_p': 0.70,
+            'frequency_penalty': 0.00,
+            'presence_penalty': 0.00,
+            'stream': False,
+        }
+        headers = {
+            'Authorization': f'Bearer {NVIDIA_API_KEY}',
+            'Accept': 'application/json',
+        }
+        resp = requests.post(INVOKE_URL, headers=headers, json=payload, timeout=60)
+        resp.raise_for_status()
+        data = resp.json()
+        full_text = (data['choices'][0]['message']['content'] or '').strip()
         return full_text or '[Empty response from AI]', None
 
-    except Exception as e:
-        err_str = str(e)
-        print(f'[LUCID] OpenAI client error: {err_str}')
-        if '403' in err_str:
+    except requests.exceptions.HTTPError as e:
+        status = e.response.status_code
+        body = e.response.text[:300]
+        print(f'[LUCID] HTTP {status}: {body}')
+        if status == 403:
             return f'[Your API key lacks access to "{model}".]', None
-        if '404' in err_str:
+        if status == 404:
             return f'[Model "{model}" not found.]', None
-        if '429' in err_str or '402' in err_str:
+        if status in (429, 402):
             return '[API rate limited. Check NVIDIA billing.]', None
+        return f'[AI service error (HTTP {status}).]', None
+    except Exception as e:
+        print(f'[LUCID] Error: {e}')
         return f'[AI service error.]', None
 
 

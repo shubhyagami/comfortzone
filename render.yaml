@@ -10,6 +10,6 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: NVIDIA_MODEL
-        value: deepseek-ai/deepseek-v4-flash
+        value: google/gemma-3n-e4b-it
       - key: PYTHON_VERSION
         value: 3.11.0
