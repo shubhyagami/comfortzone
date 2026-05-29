@@ -110,7 +110,7 @@ store_lock = threading.Lock()
 INVOKE_URL = 'https://integrate.api.nvidia.com/v1/chat/completions'
 
 def _prep_messages(messages):
-    """Prepend system prompt into first user message for models that reject system role."""
+    """Merge system into first user message & collapse consecutive same-role messages."""
     out = []
     sys_block = ''
     for m in messages:
@@ -120,7 +120,14 @@ def _prep_messages(messages):
             out.append(dict(m))
     if sys_block and out:
         out[0]['content'] = sys_block.strip() + '\n\n###\n\n' + out[0]['content']
-    return out or messages
+    # Collapse consecutive same-role messages (NV API requires strict alternation)
+    collapsed = []
+    for m in out:
+        if collapsed and collapsed[-1]['role'] == m['role']:
+            collapsed[-1]['content'] += '\n\n' + m['content']
+        else:
+            collapsed.append(m)
+    return collapsed or messages
 
 def nvidia_chat(model, messages, temperature=0.2, max_tokens=512):
     if not NVIDIA_API_KEY:
@@ -137,11 +144,13 @@ def nvidia_chat(model, messages, temperature=0.2, max_tokens=512):
             'presence_penalty': 0.0,
             'stream': False,
         }
+        if 'deepseek' in model:
+            payload['chat_template_kwargs'] = {'thinking': False}
         headers = {
             'Authorization': f'Bearer {NVIDIA_API_KEY}',
             'Accept': 'application/json',
         }
-        resp = requests.post(INVOKE_URL, headers=headers, json=payload, timeout=60)
+        resp = requests.post(INVOKE_URL, headers=headers, json=payload, timeout=(10, 120))
         resp.raise_for_status()
         data = resp.json()
         full_text = (data['choices'][0]['message']['content'] or '').strip()
