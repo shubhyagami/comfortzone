@@ -459,21 +459,13 @@ def api_chat_group():
     now = datetime.now().isoformat()
     chats[group_key].append({'role': 'user', 'content': message, 'timestamp': now})
 
-    # Build context from the last few AI messages
-    context_history = []
-    for m in chats[group_key][-8:-1]:
-        if m['role'] == 'assistant':
-            content = m.get('content', '')
-            context_history.append(content)
-
-    responses = generate_group_responses(message, history=context_history)
+    responses = generate_group_responses(message)
 
     for r in responses:
         chats[group_key].append({
             'role': 'assistant',
             'content': f"[{r['personality_name']}]: {r['reply']}",
             'personality': r['personality'],
-            'replying_to': r.get('replying_to'),
             'timestamp': now,
         })
 
@@ -490,112 +482,23 @@ SEED_TOPICS = [
 _seed_idx = 0
 
 
-def generate_group_responses(seed_message, history=None):
-    """Multi-round AI-to-AI group conversation that feels like a real discussion chain."""
-    global _seed_idx
+def generate_group_responses(seed_message):
+    """All 4 AIs respond to the user's message — one round, no AI-to-AI replies."""
     responses = []
-    history = history or []
-
-    # Inject memories for the group (uses the special _group personality key)
     user_id = session.get('user_id', '')
     memory_block = build_memory_context(user_id, seed_message)
 
-    def _call(personality_id, system_extra, context_extras=None):
-        p = PERSONALITIES[personality_id]
-        system = p['system_prompt'] + '\n\n' + system_extra + memory_block
+    for pid in GROUP_ORDER:
+        p = PERSONALITIES[pid]
+        system = p['system_prompt'] + '\n\nYou are in a group conversation. Respond directly to the user in 1-2 sentences. Do not address other AIs. Be concise.' + memory_block
         msgs = [{'role': 'system', 'content': system}]
-        for h in history[-6:]:
-            msgs.append({'role': 'assistant', 'content': h})
-        for r in responses:
-            msgs.append({'role': 'assistant', 'content': f"[{r['personality_name']}]: {r['reply']}"})
-        if context_extras:
-            for ce in context_extras:
-                msgs.append(ce)
         msgs.append({'role': 'user', 'content': seed_message})
         text, _ = nvidia_chat(p['model'], msgs, p['temperature'])
-        return text.strip()
-
-    # ── ROUND 1: All 4 respond to the seed ──
-    round1_order = GROUP_ORDER.copy()
-    random.shuffle(round1_order)
-    for pid in round1_order:
-        p = PERSONALITIES[pid]
-        text = _call(pid,
-            "This is a GROUP conversation. Respond naturally in 1-2 sentences. "
-            "Do NOT use brackets or labels like '[Name]:' — just speak your response plainly. "
-            "If someone already spoke, react naturally to what they said. "
-            "Be concise and human-sounding, like a real chat.")
         responses.append({
-            'reply': text, 'personality': pid,
+            'reply': text.strip() or '[empty]', 'personality': pid,
             'personality_name': p['name'], 'color': p['color'],
-            'replying_to': None,
         })
 
-    # ── ROUND 2: 2 AIs reply to specific Round 1 messages ──
-    round1_responses = [r for r in responses]
-    random.shuffle(round1_responses)
-    for idx in range(min(2, len(round1_responses))):
-        target = round1_responses[idx]
-        reply_pool = [pid for pid in GROUP_ORDER if pid != target['personality'] and not any(
-            r['personality'] == pid and r != target for r in responses[-2:]
-        )]
-        if not reply_pool:
-            reply_pool = [pid for pid in GROUP_ORDER if pid != target['personality']]
-        pid = random.choice(reply_pool)
-        p = PERSONALITIES[pid]
-        text = _call(pid,
-            f"Reply directly to {target['personality_name']}'s point. "
-            f"React naturally — agree, disagree, or expand. "
-            f"1-2 sentences. Do NOT use brackets or labels, just your response.",
-            context_extras=[{
-                'role': 'assistant',
-                'content': f"{target['personality_name']} said: \"{target['reply'][:200]}\""
-            }])
-        responses.append({
-            'reply': text, 'personality': pid,
-            'personality_name': p['name'], 'color': p['color'],
-            'replying_to': target['personality'],
-        })
-
-    # ── ROUND 3: Deeper chain — 1 AI replies to a Round 2 reply, 1 AI adds fresh take ──
-    round2_responses = responses[4:]  # everything after round 1
-    if round2_responses:
-        target = random.choice(round2_responses)
-        reply_pool = [pid for pid in GROUP_ORDER if pid != target['personality']]
-        pid = random.choice(reply_pool)
-        p = PERSONALITIES[pid]
-        text = _call(pid,
-            f"This is a follow-up. {target['personality_name']} made a point worth digging into. "
-            f"Respond to them directly. Keep it sharp and short — 1-2 sentences.",
-            context_extras=[{
-                'role': 'assistant',
-                'content': f"{target['personality_name']} said: \"{target['reply'][:200]}\""
-            }])
-        responses.append({
-            'reply': text, 'personality': pid,
-            'personality_name': p['name'], 'color': p['color'],
-            'replying_to': target['personality'],
-        })
-
-    # One more free-form response — whoever hasn't spoken recently
-    recent = [r['personality'] for r in responses[-3:]]
-    quiet = [pid for pid in GROUP_ORDER if pid not in recent]
-    if quiet:
-        pid = random.choice(quiet)
-        p = PERSONALITIES[pid]
-        text = _call(pid,
-            "Add a fresh angle to this discussion. Don't repeat — bring something new. 1-2 sentences.",
-            context_extras=[{
-                'role': 'assistant',
-                'content': "This is your chance to add a perspective no one else has mentioned yet."
-            }])
-        responses.append({
-            'reply': text, 'personality': pid,
-            'personality_name': p['name'], 'color': p['color'],
-            'replying_to': None,
-        })
-
-    _seed_idx = (_seed_idx + 1) % len(SEED_TOPICS)
     return responses
 
 
@@ -609,7 +512,7 @@ def api_chat_group_auto():
     if group_key not in chats:
         chats[group_key] = []
 
-    seed = SEED_TOPICS[(_seed_idx) % len(SEED_TOPICS)]
+    seed = random.choice(SEED_TOPICS)
     responses = generate_group_responses(seed)
     now = datetime.now().isoformat()
 
@@ -618,7 +521,6 @@ def api_chat_group_auto():
             'role': 'assistant',
             'content': f"[{r['personality_name']}]: {r['reply']}",
             'personality': r['personality'],
-            'replying_to': r.get('replying_to'),
             'timestamp': now,
         })
 

@@ -197,7 +197,6 @@ function playNextAuto() {
     autoPlaying = false;
     return;
   }
-  // If user sent a message, stop the auto-play
   if (document.getElementById('groupMessagesList').querySelector('.message:last-child')?.classList.contains('user')) {
     autoPlaying = false;
     autoQueue = [];
@@ -221,14 +220,12 @@ function playNextAuto() {
     </div>`;
   scrollToBottom('groupMessagesList');
 
-  // Natural typing delay — replying to someone takes a moment to think
-  const thinkTime = r.replying_to ? (1800 + Math.random() * 1200) : (1200 + Math.random() * 1000);
+  const thinkTime = 800 + Math.random() * 600;
   autoTimer = setTimeout(() => {
     if (!autoPlaying) return;
     document.getElementById('groupTypingIndicator').style.display = 'none';
-    addGroupMessage('ai', r.reply, r.personality, r.replying_to || null);
-
-    const pause = r.replying_to ? (600 + Math.random() * 400) : (400 + Math.random() * 300);
+    addGroupMessage('ai', r.reply, r.personality);
+    const pause = 300 + Math.random() * 300;
     autoTimer = setTimeout(playNextAuto, pause);
   }, thinkTime);
 }
@@ -313,16 +310,15 @@ function sendGroupMessage() {
   if (!text) return;
   input.value = '';
   input.style.height = 'auto';
-  // Cancel any auto-play when user speaks
   cancelAutoPlay();
   addGroupMessage('user', text);
   document.getElementById('groupEmptyState').style.display = 'none';
   detectEmotion(text);
 
-  const pList = Object.entries(personalities);
-  let idx = 0;
-  showGroupTyping(pList[idx][0]);
   document.getElementById('sendBtn').disabled = true;
+  // Show all 4 typing simultaneously
+  const pList = Object.entries(personalities);
+  showGroupTyping('group');
 
   fetch('/api/chat/group', {
     method: 'POST',
@@ -331,22 +327,17 @@ function sendGroupMessage() {
   })
     .then(r => r.json())
     .then(data => {
+      hideGroupTyping();
       let pi = 0;
       function showNext() {
         if (pi >= data.responses.length) {
-          hideGroupTyping();
           document.getElementById('sendBtn').disabled = false;
           return;
         }
         const r = data.responses[pi];
-        showGroupTyping(r.personality);
-        const delay = r.replying_to ? 1800 : 1200;
-        setTimeout(() => {
-          hideGroupTyping();
-          addGroupMessage('ai', r.reply, r.personality, r.replying_to || null);
-          pi++;
-          setTimeout(showNext, r.replying_to ? 800 : 600);
-        }, delay);
+        addGroupMessage('ai', r.reply, r.personality);
+        pi++;
+        setTimeout(showNext, 400 + Math.random() * 300);
       }
       showNext();
     })
@@ -385,7 +376,7 @@ function addMessage(role, content, personality) {
   scrollToBottom('messagesContainer');
 }
 
-function addGroupMessage(role, content, personality, replyingTo) {
+function addGroupMessage(role, content, personality) {
   const container = document.getElementById('groupMessagesList');
   const isUser = role === 'user';
   const div = document.createElement('div');
@@ -394,18 +385,12 @@ function addGroupMessage(role, content, personality, replyingTo) {
   if (!isUser && personality) {
     const p = personalities[personality];
     const c = p ? p.color : '#00d4ff';
-    let replyBadge = '';
-    if (replyingTo && personalities[replyingTo]) {
-      const rc = personalities[replyingTo].color;
-      replyBadge = `<div class="reply-badge" style="--reply-color:${rc}">↳ replying to <span style="color:${rc}">${personalities[replyingTo].name}</span></div>`;
-    }
     div.innerHTML = `
       <div style="max-width:75%">
         <div class="message-row">
           <div class="message-avatar" style="background:${c}15;border-color:${c}33;overflow:hidden;"><img src="${p.avatar}" alt="${p.name}" class="avatar-img"></div>
           <div>
             <div class="message-label" style="color:${c}">${p ? p.name : personality}</div>
-            ${replyBadge}
             <div class="message-bubble" style="border-color:${c}22;box-shadow:0 0 12px ${c}11"></div>
           </div>
         </div>
@@ -440,21 +425,27 @@ function hideTyping() {
   document.getElementById('typingIndicator').style.display = 'none';
 }
 
-function showGroupTyping(personality) {
-  const p = personalities[personality];
-  const c = p ? p.color : '#00d4ff';
+function showGroupTyping(mode) {
   const el = document.getElementById('groupTypingIndicator');
   el.style.display = 'flex';
-  el.innerHTML = `
-    <div class="message-avatar" style="background:${c}15;border-color:${c}33;overflow:hidden;"><img src="${p.avatar}" alt="${p.name}" class="avatar-img"></div>
-    <div class="glass-light" style="padding:0.6rem 1rem;border-radius:1rem;display:flex;align-items:center;gap:0.5rem;">
-      <span style="font-size:0.65rem;color:${c};font-family:'Orbitron',sans-serif;">${p ? p.name : personality}</span>
-      <div class="typing-dots">
-        <div class="typing-dot" style="background:${c}"></div>
-        <div class="typing-dot" style="background:${c}"></div>
-        <div class="typing-dot" style="background:${c}"></div>
-      </div>
-    </div>`;
+  if (mode === 'group') {
+    el.innerHTML = Object.entries(personalities).map(([id, p]) => `
+      <div class="message-avatar" style="background:${p.color}15;border-color:${p.color}33;overflow:hidden;width:1.8rem;height:1.8rem;"><img src="${p.avatar}" alt="${p.name}" class="avatar-img"></div>
+    `).join('');
+  } else {
+    const p = personalities[mode];
+    const c = p ? p.color : '#00d4ff';
+    el.innerHTML = `
+      <div class="message-avatar" style="background:${c}15;border-color:${c}33;overflow:hidden;"><img src="${p.avatar}" alt="${p.name}" class="avatar-img"></div>
+      <div class="glass-light" style="padding:0.6rem 1rem;border-radius:1rem;display:flex;align-items:center;gap:0.5rem;">
+        <span style="font-size:0.65rem;color:${c};font-family:'Orbitron',sans-serif;">${p ? p.name : mode}</span>
+        <div class="typing-dots">
+          <div class="typing-dot" style="background:${c}"></div>
+          <div class="typing-dot" style="background:${c}"></div>
+          <div class="typing-dot" style="background:${c}"></div>
+        </div>
+      </div>`;
+  }
   scrollToBottom('groupMessagesList');
 }
 
