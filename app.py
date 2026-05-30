@@ -459,7 +459,8 @@ def api_chat_group():
     now = datetime.now().isoformat()
     chats[group_key].append({'role': 'user', 'content': message, 'timestamp': now})
 
-    responses = generate_group_responses(message)
+    history = [{'role': m['role'], 'content': m['content']} for m in chats[group_key][-15:-1]]
+    responses = generate_group_responses(message, history=history)
 
     for r in responses:
         chats[group_key].append({
@@ -482,16 +483,19 @@ SEED_TOPICS = [
 _seed_idx = 0
 
 
-def generate_group_responses(seed_message):
-    """All 4 AIs respond to the user's message — one round, no AI-to-AI replies."""
+def generate_group_responses(seed_message, history=None):
+    """All 4 AIs respond to the user's message with group conversation history."""
     responses = []
     user_id = session.get('user_id', '')
     memory_block = build_memory_context(user_id, seed_message)
+    history = history or []
 
     for pid in GROUP_ORDER:
         p = PERSONALITIES[pid]
         system = p['system_prompt'] + '\n\nYou are in a group conversation. Respond directly to the user in 1-2 sentences. Do not address other AIs. Be concise.' + memory_block
         msgs = [{'role': 'system', 'content': system}]
+        for h in history[-12:]:
+            msgs.append({'role': h['role'], 'content': h['content']})
         msgs.append({'role': 'user', 'content': seed_message})
         text, _ = nvidia_chat(p['model'], msgs, p['temperature'])
         responses.append({
@@ -513,7 +517,8 @@ def api_chat_group_auto():
         chats[group_key] = []
 
     seed = random.choice(SEED_TOPICS)
-    responses = generate_group_responses(seed)
+    history = [{'role': m['role'], 'content': m['content']} for m in chats[group_key][-10:]]
+    responses = generate_group_responses(seed, history=history)
     now = datetime.now().isoformat()
 
     for r in responses:
