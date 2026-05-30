@@ -9,5 +9,7 @@ services:
         sync: false
       - key: SECRET_KEY
         generateValue: true
+      - key: NVIDIA_MODEL
+        value: meta/llama-4-maverick-17b-128e-instruct
       - key: PYTHON_VERSION
         value: 3.11.0

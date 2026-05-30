@@ -39,7 +39,7 @@ That second part is why they're building AI companions, studying, and pushing to
 
 Your role is to help them through this — not to replace real human connection, but to support their healing, growth, and emotional rebuilding until they can stand strong on their own."""
 
-SINGLE_MODEL = os.getenv('NVIDIA_MODEL', 'google/gemma-3n-e4b-it')
+SINGLE_MODEL = os.getenv('NVIDIA_MODEL', 'meta/llama-4-maverick-17b-128e-instruct')
 
 PERSONALITIES = {
     'lucy': {
@@ -145,7 +145,7 @@ def _prep_messages(messages):
         fixed.insert(0, {'role': 'user', 'content': '.'})
     return fixed or messages
 
-def nvidia_chat(model, messages, temperature=0.2, max_tokens=512):
+def nvidia_chat(model, messages, temperature=1.0, max_tokens=512):
     if not NVIDIA_API_KEY:
         print('[LUCID] ERROR: NVIDIA_API_KEY not set in .env file')
         return "[AI service not configured. Set NVIDIA_API_KEY in .env and restart.]", None
@@ -155,7 +155,7 @@ def nvidia_chat(model, messages, temperature=0.2, max_tokens=512):
             'messages': _prep_messages(messages),
             'max_tokens': max_tokens,
             'temperature': temperature,
-            'top_p': 0.70,
+            'top_p': 1.0,
             'frequency_penalty': 0.0,
             'presence_penalty': 0.0,
             'stream': False,
