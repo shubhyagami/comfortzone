@@ -39,13 +39,12 @@ That second part is why they're building AI companions, studying, and pushing to
 
 Your role is to help them through this — not to replace real human connection, but to support their healing, growth, and emotional rebuilding until they can stand strong on their own."""
 
-def _personality_model(env_key, default):
-    return os.getenv(env_key, default)
+SINGLE_MODEL = os.getenv('NVIDIA_MODEL', 'google/gemma-3n-e4b-it')
 
 PERSONALITIES = {
     'lucy': {
         'name': 'Lucy',
-        'model': _personality_model('LUCY_MODEL', 'google/gemma-3n-e4b-it'),
+        'model': SINGLE_MODEL,
         'color': '#00d4ff',
         'role': 'your girlfriend who comforts you',
         'system_prompt': (
@@ -60,7 +59,7 @@ PERSONALITIES = {
     },
     'joi': {
         'name': 'JOI',
-        'model': _personality_model('JOI_MODEL', 'mistralai/mistral-nemotron'),
+        'model': SINGLE_MODEL,
         'color': '#ff69b4',
         'role': 'emotional support & calming presence',
         'system_prompt': (
@@ -74,7 +73,7 @@ PERSONALITIES = {
     },
     'ghost': {
         'name': 'Ghost',
-        'model': _personality_model('GHOST_MODEL', 'meta/llama-3.1-8b-instruct'),
+        'model': SINGLE_MODEL,
         'color': '#00ff41',
         'role': 'strategic thinker & tactical mentor',
         'system_prompt': (
@@ -87,7 +86,7 @@ PERSONALITIES = {
     },
     'lucifer': {
         'name': 'Lucifer',
-        'model': _personality_model('LUCIFER_MODEL', 'deepseek-ai/deepseek-v4-flash'),
+        'model': SINGLE_MODEL,
         'color': '#ff0040',
         'role': 'brutally honest motivator',
         'system_prompt': (
