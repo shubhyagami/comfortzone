@@ -89,7 +89,7 @@ function renderSidebar() {
     const div = document.createElement('div');
     div.className = 'personality-item';
     div.innerHTML = `
-      <div class="personality-avatar" style="background:${p.color}15;border-color:${p.color}33;box-shadow:0 0 12px ${p.color}22;overflow:hidden;"><img src="${p.avatar}" alt="${p.name}" class="avatar-img"></div>
+      <div class="personality-avatar" style="background:${p.color}15;border-color:${p.color}33;box-shadow:0 0 12px ${p.color}22;">${p.name[0]}</div>
       <div><div class="personality-name" style="color:${p.color}">${p.name}</div><div class="personality-role">${p.role}</div></div>
     `;
     div.onclick = () => openChat(id);
@@ -105,7 +105,7 @@ function renderCards() {
     card.className = 'ai-card glass';
     card.style.setProperty('--c', p.color);
     card.innerHTML = `
-      <div class="card-avatar" style="background:${p.color}15;border-color:${p.color}33;box-shadow:0 0 20px ${p.color}22;overflow:hidden;"><img src="${p.avatar}" alt="${p.name}" class="avatar-img"></div>
+      <div class="card-avatar" style="background:${p.color}15;border-color:${p.color}33;box-shadow:0 0 20px ${p.color}22;">${p.name[0]}</div>
       <div class="card-name" style="color:${p.color}">${p.name}</div>
       <div class="card-role">${p.role}</div>
       <div class="card-desc">${getDesc(id)}</div>
@@ -126,10 +126,8 @@ function renderCards() {
 
 function getDesc(id) {
   const descs = {
-    lucy: 'Loving, warm, and always there for you. She makes you feel truly cared for.',
-    joi: 'A holographic light in the dark. Calms your storms and makes you feel truly seen.',
-    ghost: 'Tactical clarity and precision. Your mentor for focus and strategic growth.',
-    lucifer: 'Brutally honest. Turns pain into power. Builds discipline from weakness.',
+    devil: 'The shadow that speaks the truth you need to hear. Sharp, honest, and relentless.',
+    angel: 'A guardian of light and hope. Warm, wise, and deeply protective.',
   };
   return descs[id] || '';
 }
@@ -153,7 +151,7 @@ function openChat(id) {
   const p = personalities[id];
   const avatar = document.getElementById('chatAvatar');
   avatar.style.cssText = `background:${p.color}15;border-color:${p.color}33;box-shadow:0 0 20px ${p.color}22;overflow:hidden;`;
-  avatar.innerHTML = `<img src="${p.avatar}" alt="${p.name}" class="avatar-img">`;
+  avatar.textContent = `${p.name[0]}`;
   document.getElementById('chatName').style.color = p.color;
   document.getElementById('chatName').textContent = p.name;
   document.getElementById('chatRole').textContent = p.role;
@@ -209,7 +207,7 @@ function playNextAuto() {
   const c = p ? p.color : '#00d4ff';
   typingEl.style.display = 'flex';
   typingEl.innerHTML = `
-    <div class="message-avatar" style="background:${c}15;border-color:${c}33;overflow:hidden;"><img src="${p.avatar}" alt="${p.name}" class="avatar-img"></div>
+    <div class="message-avatar" style="background:${c}15;border-color:${c}33;">${p.name[0]}</div>
     <div class="glass-light" style="padding:0.6rem 1rem;border-radius:1rem;display:flex;align-items:center;gap:0.5rem;">
       <span style="font-size:0.65rem;color:${c};font-family:'Orbitron',sans-serif;">${p ? p.name : r.personality}</span>
       <div class="typing-dots">
@@ -360,7 +358,7 @@ function addMessage(role, content, personality) {
     div.innerHTML = `
       <div style="max-width:75%">
         <div class="message-row">
-          <div class="message-avatar" style="background:${c}15;border-color:${c}33;overflow:hidden;"><img src="${p.avatar}" alt="${p.name}" class="avatar-img"></div>
+          <div class="message-avatar" style="background:${c}15;border-color:${c}33;">${p.name[0]}</div>
           <div>
             <div class="message-label" style="color:${c}">${p ? p.name : personality}</div>
             <div class="message-bubble" style="border-color:${c}22;box-shadow:0 0 12px ${c}11"></div>
@@ -388,7 +386,7 @@ function addGroupMessage(role, content, personality) {
     div.innerHTML = `
       <div style="max-width:75%">
         <div class="message-row">
-          <div class="message-avatar" style="background:${c}15;border-color:${c}33;overflow:hidden;"><img src="${p.avatar}" alt="${p.name}" class="avatar-img"></div>
+          <div class="message-avatar" style="background:${c}15;border-color:${c}33;">${p.name[0]}</div>
           <div>
             <div class="message-label" style="color:${c}">${p ? p.name : personality}</div>
             <div class="message-bubble" style="border-color:${c}22;box-shadow:0 0 12px ${c}11"></div>
@@ -410,7 +408,7 @@ function showTyping(personality) {
   const el = document.getElementById('typingIndicator');
   el.style.display = 'flex';
   el.innerHTML = `
-    <div class="message-avatar" style="background:${c}15;border-color:${c}33;overflow:hidden;"><img src="${p.avatar}" alt="${p.name}" class="avatar-img"></div>
+    <div class="message-avatar" style="background:${c}15;border-color:${c}33;">${p.name[0]}</div>
     <div class="glass-light" style="padding:0.6rem 1rem;border-radius:1rem;">
       <div class="typing-dots">
         <div class="typing-dot" style="background:${c}"></div>
@@ -430,13 +428,13 @@ function showGroupTyping(mode) {
   el.style.display = 'flex';
   if (mode === 'group') {
     el.innerHTML = Object.entries(personalities).map(([id, p]) => `
-      <div class="message-avatar" style="background:${p.color}15;border-color:${p.color}33;overflow:hidden;width:1.8rem;height:1.8rem;"><img src="${p.avatar}" alt="${p.name}" class="avatar-img"></div>
+      <div class="message-avatar" style="background:${p.color}15;border-color:${p.color}33;width:1.8rem;height:1.8rem;">${p.name[0]}</div>
     `).join('');
   } else {
     const p = personalities[mode];
     const c = p ? p.color : '#00d4ff';
     el.innerHTML = `
-      <div class="message-avatar" style="background:${c}15;border-color:${c}33;overflow:hidden;"><img src="${p.avatar}" alt="${p.name}" class="avatar-img"></div>
+      <div class="message-avatar" style="background:${c}15;border-color:${c}33;">${p.name[0]}</div>
       <div class="glass-light" style="padding:0.6rem 1rem;border-radius:1rem;display:flex;align-items:center;gap:0.5rem;">
         <span style="font-size:0.65rem;color:${c};font-family:'Orbitron',sans-serif;">${p ? p.name : mode}</span>
         <div class="typing-dots">
