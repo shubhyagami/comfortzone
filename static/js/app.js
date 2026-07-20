@@ -30,38 +30,40 @@ window.addEventListener('beforeunload', function () {
   window.addEventListener('resize', resize);
 
   const count = Math.min(Math.floor((w * h) / 18000), 80);
+  const colors = ['#c4a060', '#d4a040', '#b89070', '#a08060'];
   particles = Array.from({ length: count }, () => ({
     x: Math.random() * w, y: Math.random() * h,
-    vx: (Math.random() - 0.5) * 0.2, vy: (Math.random() - 0.5) * 0.2,
-    size: Math.random() * 2 + 0.5,
-    alpha: Math.random() * 0.3 + 0.1,
+    vx: (Math.random() - 0.5) * 0.15, vy: (Math.random() - 0.5) * 0.15,
+    size: Math.random() * 2.5 + 0.5,
+    alpha: Math.random() * 0.25 + 0.05,
     phase: Math.random() * Math.PI * 2,
+    color: colors[Math.floor(Math.random() * colors.length)],
   }));
 
   function animate() {
     ctx.clearRect(0, 0, w, h);
     for (const p of particles) {
-      p.x += p.vx; p.y += p.vy; p.phase += 0.015;
+      p.x += p.vx; p.y += p.vy; p.phase += 0.008;
       if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
       if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      ctx.fillStyle = '#00d4ff';
-      ctx.globalAlpha = p.alpha * (0.6 + 0.4 * Math.sin(p.phase));
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.alpha * (0.5 + 0.5 * Math.sin(p.phase));
       ctx.fill();
     }
-    ctx.globalAlpha = 0.015;
+    ctx.globalAlpha = 0.008;
     for (let i = 0; i < particles.length; i++) {
       for (let j = i + 1; j < particles.length; j++) {
         const dx = particles[i].x - particles[j].x;
         const dy = particles[i].y - particles[j].y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 100) {
+        if (dist < 120) {
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = '#00d4ff';
-          ctx.globalAlpha = 0.06 * (1 - dist / 100);
+          ctx.strokeStyle = particles[i].color;
+          ctx.globalAlpha = 0.04 * (1 - dist / 120);
           ctx.stroke();
         }
       }
@@ -242,6 +244,7 @@ function backToHome() {
   document.getElementById('memoriesView').style.display = 'none';
   hideEmotionBadge();
   hidePanicMode();
+  clearSceneEffects();
   updateSidebarActive(null);
 }
 
@@ -314,8 +317,6 @@ function sendGroupMessage() {
   detectEmotion(text);
 
   document.getElementById('sendBtn').disabled = true;
-  // Show all 4 typing simultaneously
-  const pList = Object.entries(personalities);
   showGroupTyping('group');
 
   fetch('/api/chat/group', {
@@ -333,9 +334,14 @@ function sendGroupMessage() {
           return;
         }
         const r = data.responses[pi];
-        addGroupMessage('ai', r.reply, r.personality);
-        pi++;
-        setTimeout(showNext, 400 + Math.random() * 300);
+        const p = personalities[r.personality];
+        showGroupTyping(r.personality);
+        setTimeout(() => {
+          hideGroupTyping();
+          addGroupMessage('ai', r.reply, r.personality);
+          pi++;
+          setTimeout(showNext, 300 + Math.random() * 200);
+        }, 500 + Math.random() * 400);
       }
       showNext();
     })
@@ -400,6 +406,7 @@ function addGroupMessage(role, content, personality) {
 
   container.appendChild(div);
   scrollToBottom('groupMessagesList');
+  if (!isUser && personality) triggerSceneEffect(personality);
 }
 
 function showTyping(personality) {
@@ -470,7 +477,7 @@ function detectEmotion(text) {
 }
 
 function showEmotionBadge(emotion) {
-  const colors = { panic: '#ff69b4', anxiety: '#00d4ff', sadness: '#bb86fc', stress: '#ffa500', motivation: '#00ff41' };
+  const colors = { panic: '#c4a060', anxiety: '#d4a040', sadness: '#b89070', stress: '#a08060', motivation: '#d4c9b8' };
   const labels = { panic: 'PANIC DETECTED', anxiety: 'ANXIETY', sadness: 'SADNESS', stress: 'STRESS', motivation: 'MOTIVATION' };
   const c = colors[emotion] || '#00d4ff';
   const badge = document.getElementById('emotionBadge');
@@ -613,4 +620,40 @@ function deleteAllMemories() {
     .then(() => {
       document.getElementById('memoriesList').innerHTML = '<div style="text-align:center;padding:2rem;color:rgba(255,255,255,0.3)">// All memories deleted.</div>';
     });
+}
+
+// ── Background Scene Effects ──
+let devilEffectTimer = null;
+let angelEffectTimer = null;
+let apocalypseTimer = null;
+
+function clearSceneEffects() {
+  document.getElementById('lavaOverlay').classList.remove('active');
+  document.getElementById('heavenOverlay').classList.remove('active');
+  document.getElementById('apocalypseOverlay').classList.remove('active');
+  if (devilEffectTimer) { clearTimeout(devilEffectTimer); devilEffectTimer = null; }
+  if (angelEffectTimer) { clearTimeout(angelEffectTimer); angelEffectTimer = null; }
+  if (apocalypseTimer) { clearTimeout(apocalypseTimer); apocalypseTimer = null; }
+}
+
+function triggerSceneEffect(personality) {
+  const lava = document.getElementById('lavaOverlay');
+  const heaven = document.getElementById('heavenOverlay');
+  const apoc = document.getElementById('apocalypseOverlay');
+
+  if (personality === 'devil') {
+    lava.classList.add('active');
+    if (devilEffectTimer) clearTimeout(devilEffectTimer);
+    devilEffectTimer = setTimeout(() => lava.classList.remove('active'), 4000);
+    apoc.classList.add('active');
+    if (apocalypseTimer) clearTimeout(apocalypseTimer);
+    apocalypseTimer = setTimeout(() => apoc.classList.remove('active'), 6000);
+  } else if (personality === 'angel') {
+    heaven.classList.add('active');
+    if (angelEffectTimer) clearTimeout(angelEffectTimer);
+    angelEffectTimer = setTimeout(() => heaven.classList.remove('active'), 4500);
+    apoc.classList.add('active');
+    if (apocalypseTimer) clearTimeout(apocalypseTimer);
+    apocalypseTimer = setTimeout(() => apoc.classList.remove('active'), 6000);
+  }
 }
