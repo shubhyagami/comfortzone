@@ -23,87 +23,43 @@
 
 ## 🔥 What Is This?
 
-**ComfortZone** is your personal sanctuary of data – a hybrid Python/JS toolkit that tracks, visualises, and nudges you toward your ideal comfort metrics. Whether it's room temperature, ambient noise, humidity, or your subjective mood, ComfortZone turns raw sensor readings into actionable insights. Stop guessing – start thriving.
-
-> “Your comfort zone is not a cage – it’s a dashboard.”
+**ComfortZone** is your personal sanctuary of data – a hybrid Python/JS toolkit that tracks, visualises, and nudges you toward your ideal comfort metrics. Whether it's room temperature, ambient noise, humidity, or your subjective mood, ComfortZone turns raw sensor readings into act
 
 ---
 
-## ✨ Features
+## 🕰️ Contributing to the Sacred Timeline
 
-| Icon | Feature | Description |
-|------|---------|-------------|
-| 🌡️ | **Temperature Tracking** | Record ambient and skin‑temp from sensors or manual input |
-| 😌 | **Mood Logging** | Tag your emotional state alongside physical data |
-| 📊 | **Analytics Dashboard** | Real‑time charts & historical trends (matplotlib / Chart.js) |
-| 🔔 | **Smart Alerts** | Get pinged when conditions drift outside your sweet spot |
-| 🧩 | **Plugin System** | Extend with new sensors or export formats (JSON, CSV, PDF) |
-| 🌐 | **Cross‑Platform** | CLI (Python) + Web UI (JS/React) – pick your weapon |
+> *“I *am* a variant.” — And so is your pull request.*
 
----
+Welcome, Analyst! The Time Variance Authority has detected a branching timeline originating from your local development environment. Before you commit that code, please ensure your PR aligns with the **Sacred Timeline** of the `comfortzone` project. Unchecked variables will be pruned.
 
-## 🧠 How It Works
+### 📜 Pruning Protocol (Before You Branch)
+1. **Check Your Nexus:** Ensure your local branch is up to date with the **Sacred Timeline** (`main`). Timeline divergence from outdated codebases will not be tolerated.
+2. **Minimize Variance:** Keep your commits focused. Massive reality-altering refactors without prior approval from a TVA Engineer may result in a Reset Charge deployed on your PR.
+3. **Temps.commits:** We use conventional commits to maintain chronological order. Format: `feat: [change]`, `fix: [change]`, or `docs: [update to the TVA handbook]`.
 
-```mermaid
-graph LR
-    A[🌡️ Sensor Input] --> B{ComfortZone Engine}
-    C[📝 Manual Log] --> B
-    B --> D[📈 Data Processor]
-    D --> E[🗃️ SQLite / LocalStorage]
-    E --> F[📊 Visualizer]
-    F --> G[📋 Insights & Alerts]
-    G --> H[🚀 Action!]
-```
+### ⚙️ The Sacred Workflow
+To submit a correction to the timeline, follow these steps:
 
-1. **Input** – Sensors or manual logs feed raw data into the engine.
-2. **Process** – The engine normalises, timestamps, and validates each reading.
-3. **Store** – Data is persisted locally (SQLite for CLI, IndexedDB for Web UI).
-4. **Visualise** – Charts and heatmaps reveal patterns in your comfort.
-5. **Alert** – Get notified when metrics deviate from your personalised thresholds.
-6. **Act** – Adjust your environment, log a mood, or export a report.
-
----
-
-## 🚀 Quick Start
-
-### CLI (Python)
 ```bash
-git clone https://github.com/shubhyagami/comfortzone.git
-cd comfortzone
-pip install -r requirements.txt
-python comfortzone.py --help
+# 1. Branch out from the main timeline (do not create a Nexus event)
+git checkout -b variant/your-feature-name
+
+# 2. Make your adjustments to reality
+git commit -m "feat: added new humidity tracker module"
+
+# 3. Submit your variant for review by the TVA
+git push origin variant/your-feature-name
 ```
+*Please open a Pull Request and tag it with the appropriate `[Miss Minutes]` label for priority review.*
 
-### Web UI (Node.js)
-```bash
-cd web-ui
-npm install
-npm start
-# Opens http://localhost:3000
-```
+### ⚠️ Forbidden Branches (Nexus Events)
+The following actions are strictly prohibited by the TVA and will result in immediate pruning:
+- Pushing directly to `main`. Nothing escapes the TVA.
+- Leaving the temporal linting configuration unaligned (we use `flake8` and `eslint`).
+- Erasing commit history. We remember *everything*, Analyst.
 
-First run? Try `python comfortzone.py --demo` to see sample data in action.
-
----
-
-## 💡 Pro Tips
-
-- **Sync your calendar**: Connect ComfortZone to your Google Calendar (via plugin) to correlate comfort with meetings – you’ll quickly spot which rooms drain you.
-- **Set a “goldilocks” range**: For each metric, define a minimum and maximum that makes you feel great. Alerts will only fire when you drift outside that sweet spot.
-- **Weekly review ritual**: Every Sunday, export the past 7 days as PDF. Compare your mood peaks to environmental data – you’ll discover hidden triggers.
-- **Combine with wearables**: Use the plugin system to pull heart‑rate or skin‑temperature data from your smartwatch. Overlay it with room temperature for deep insights.
-- **Voice logging**: Pipe audio notes through a speech‑to‑text plugin to log mood hands‑free. (Plugin coming soon – contributions welcome!)
+### 🏅 Rewards
+If your PR is successfully merged into the Sacred Timeline, you will be awarded the **TVA Analyst Badge** in the form of a green square on GitHub. Accumulate enough, and you might just earn your own minivan.
 
 ---
-
-## 📅 Changelog — 2026-07-31
-
-- **Added**: “Pro Tips” section to README with five actionable strategies.
-- **Added**: Quick Start guide for both CLI and Web UI.
-- **Updated**: Last Updated badge to today’s date.
-- **Improved**: “How It Works” diagram now includes step‑by‑step descriptions.
-- **Fixed**: Minor typos in the feature table.
-
----
-
-> 🌟 *“The best way to predict your comfort is to track it.”* – ComfortZone Mantra
