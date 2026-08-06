@@ -1,129 +1,79 @@
-╔══════════════════════════════════════════════════════════════════════════╗
-║  ██████  ██████  ███    ███ ███████  ██████  ██████  ████████ ███████  ║
-║ ██      ██    ██ ████  ████ ██      ██    ██ ██   ██    ██    ██       ║
-║ ██      ██    ██ ██ ████ ██ █████   ██    ██ ██████     ██    █████    ║
-║ ██      ██    ██ ██  ██  ██ ██      ██    ██ ██   ██    ██    ██       ║
-║  ██████  ██████  ██      ██ ██       ██████  ██   ██    ██    ███████  ║
-║  ██████  ██████  ██      ██ ██       ██████  ██   ██    ██    ███████  ║
-║ ██      ██    ██ ██      ██ ██      ██    ██ ██   ██    ██         ██  ║
-║ ██      ██    ██ ██      ██ ███████ ██    ██ ██████     ██    ███████  ║
-╚══════════════════════════════════════════════════════════════════════════╝
-                    ░░░░░░░░░░ comfortzone ░░░░░░░░░░
-          Personal Comfort Zone Tracker — Python / JavaScript
+# ComfortZone
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen?style=flat-square)](https://github.com/shubhyagami/comfortzone)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
-[![Stars](https://img.shields.io/badge/Stars-★-yellow?style=flat-square)](https://github.com/shubhyagami/comfortzone)
-![Last Updated](https://img.shields.io/badge/Last%20Updated-2026--08--07-informational?style=flat-square)
+A hybrid Python and JavaScript toolkit for tracking, visualizing, and optimizing your personal environmental comfort metrics. ComfortZone connects to local IoT sensors to monitor temperature, humidity, and ambient noise, combining this data with subjective user inputs to help you find your ideal workspace conditions.
+
 [![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)](https://www.python.org/)
 [![Node 14+](https://img.shields.io/badge/Node-14%2B-green?style=flat-square&logo=node.js)](https://nodejs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](CONTRIBUTING.md)
-[![Maintained](https://img.shields.io/badge/Maintained%20by-TVA-ff69b4?style=flat-square)](https://github.com/shubhyagami)
-[![Temporal Stability](https://img.shields.io/badge/Temporal-Stability-100%25-success?style=flat-square)](https://github.com/shubhyagami/comfortzone)
-[![Variant PRs Pruned](https://img.shields.io/badge/Variants-Pruned-0-red?style=flat-square)](https://github.com/shubhyagami/comfortzone)
 
 ---
 
-## 🔥 What Is This?
+## Features
 
-**ComfortZone** is your personal sanctuary of data – a hybrid Python/JS toolkit that tracks, visualises, and nudges you toward your ideal comfort metrics. Whether it's room temperature, ambient noise, humidity, or your subjective mood, ComfortZone turns raw sensor readings into actionable insights.
+- **Sensor Integration:** Connects to standard IoT thermostats and hygrometers to log ambient temperature and humidity automatically.
+- **Ambient Noise Tracking:** Monitors environmental noise levels to help identify disruptions in your focus and flow states.
+- **Subjective Mood Logging:** A Python CLI tool to manually log your current mood and comfort level alongside the sensor data.
+- **Customizable Dashboard:** A local web dashboard built in Node.js visualizes your metrics and can be customized using `widgets.json`.
 
 ---
 
-## 🚀 Quick Start Guide
+## Getting Started
 
-> *“Time passes differently for everyone. Let’s start yours now.”*
+Ensure you have Python 3.8+ and Node.js 14+ installed on your system before starting.
 
-Get your local environment synchronized with the Sacred Timeline in three simple steps:
-
-1. **Clone the Timeline Repository**
+1. **Clone the repository**
    ```bash
    git clone https://github.com/shubhyagami/comfortzone.git
    cd comfortzone
    ```
 
-2. **Install Dependencies (Python & Node.js required)**
+2. **Install dependencies**
    ```bash
-   # Backend / Python side
+   # Install Python backend dependencies
    pip install -r requirements.txt
 
-   # Frontend / JS side
+   # Install Node.js frontend dependencies
    npm install
    ```
 
-3. **Initialize Your Comfort Zone**
+3. **Initialize and run**
    ```bash
    python -m comfortzone --init
    npm start
    ```
-
-Your dashboard will be running at `http://localhost:3000`. Welcome to your new baseline.
-
----
-
-## 💡 Pro Tips & Featured Use Cases
-
-> *“The Sacred Timeline isn't just maintained, it's optimised for comfort.”*
-
-### 🌡️ The "Perfect Temperature" Hunt
-Use ComfortZone alongside an IoT thermostat to map your productivity against room temperature. Pro-tip: most users discover their "Goldilocks Zone" is exactly 21.5°C (71°F) with a relative humidity of 45%. 
-
-### 🧘 Zen Mode Integration
-Pair the ambient noise tracker with your morning routine. ComfortZone's JS dashboard automatically visualises noise spikes—helping you identify exactly when your environment disrupts your flow state.
-
-### 📝 TVA Approved Pro-Tips
-- **Export often:** Integrations automatically backup logs weekly; don't lose your timeline data.
-- **Subjective inputs matter:** Use the Python CLI to manually log moods. The algorithm learns your optimal comfort conditions faster with more human input.
-- **Dashboard Customization:** Add widgets by modifying `widgets.json` to keep act
+   Your local dashboard will be available at `http://localhost:3000`.
 
 ---
 
-## 🌌 Quantum Comfort Field (New!)
+## Use Cases
 
-In our ongoing pursuit of absolute environmental perfection, we've integrated a theoretical feature to detect temporal and spatial anomalies in your workspace. If your room temperature suddenly drops while your coffee remains inexplicably hot, ComfortZone flags a timeline bifurcation.
+### The "Perfect Temperature" Hunt
+Use ComfortZone alongside an IoT thermostat to map your productivity against room temperature. Most users discover their optimal "Goldilocks Zone" is approximately 21.5°C (71°F) with a relative humidity of 45%.
 
-### ⏳ Chronological Sync Calibrator
-This Widget calculates the delta between your subjective perception of time ("It feels like it's been hours") and objective chronal reality. It feeds the data directly into the TVA's mainframe to ensure your comfort metrics aren't being skewed by multiversal interference.
+### Zen Mode Integration
+Pair the ambient noise tracker with your morning routine. The dashboard automatically visualizes noise spikes, helping you identify exactly when your environment disrupts your focus.
 
----
-
-## 📅 Changelog
-
-### `2026-08-07`
-- ✨ **New:** Introduced the "Quantum Comfort Field" section to detect spatial anomalies in your workspace.
-- 🔧 **Docs:** Refreshed timeline timestamps and pruned redundant auto-maintained entries to ensure chronological alignment.
-
-### `2026-08-05`
-- ✨ **New:** Added `Temporal Stability` and `Variants Pruned` TVA status-badges for better project transparency.
-- 📈 **Docs:** Added "Quick Start" guide and "Pro Tips" section.
-- 🔧 **Docs:** Refreshed content formatting to ensure chronological alignment.
-
-*(Older entries are archived in the TVA Vault.)*
+### Developer Tips
+- **Export often:** Configurations can be set to automatically back up logs weekly. Don't lose your historical tracking data.
+- **Subjective inputs matter:** The optimization algorithm learns your ideal comfort conditions faster when you regularly log manual mood inputs via the CLI.
+- **Dashboard Customization:** Add or rearrange widgets by modifying `widgets.json` to keep your dashboard focused on the metrics you care about most.
 
 ---
 
-## 🕰️ Contributing to the Sacred Timeline
+## Contributing
 
-> *“I *am* a variant.” — And so is your pull request.*
-
-Welcome, Analyst! The Time Variance Authority has detected a branching timeline originating from your local development environment. Before you commit that code, please ensure your PR aligns with the **Sacred Timeline** of the `comfortzone` project. Unchecked variables will be pruned.
-
-### 📜 Pruning Protocol (Before You Branch)
-1. **Check Your Nexus:** Ensure your local branch is up to date with the **Sacred Timeline** (`main`). Timeline divergence from outdated codebases will not be tolerated.
-2. **Minimize Variance:** Keep your commits focused. Massive reality-altering refactors without prior approval from a TVA Engineer may result in a Reset Charge deployed on your PR.
-3. **Temps.commits:** We use conventional commits to maintain chronological order. Format: `feat: [change]`, `fix: [change]`.
-
-### 📊 Project Stats
-```text
-Temporal Files  : 24,513
-Sensor Outreach : 1,420 km
-Variants Pruned : 0
-Uptime          : 99.99%
-```
+Contributions are welcome! Before opening a pull request, please ensure your local branch is up to date with `main`. We use conventional commits to maintain a clear project history (format: `feat: [change]`, `fix: [change]`). Keep your commits focused, and please open an issue to discuss any major refactors before submitting a PR. See `CONTRIBUTING.md` for more details.
 
 ---
 
-## 🌟 Motivational Quote
+## Changelog
 
-> *“Comfort is not the absence of chaos, but the mastery of your environment within it.”*
-> — *TVA Temporal Engineer Archives, 2026*
+### 2026-08-07
+- **New:** Replaced the theoretical Quantum Comfort Field stub with concrete documentation for the sensor integration and noise tracking features.
+- **Docs:** Cleaned up README formatting, fixed broken widget configuration instructions, and removed outdated lore.
+- **Docs:** Streamlined the Quick Start guide and updated the feature list.
+
+### 2026-08-05
+- **New:** Added project status badges to the README header.
+- **Docs:** Added initial Quick Start guide and Pro Tips section.
