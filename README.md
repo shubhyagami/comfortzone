@@ -1,6 +1,6 @@
 # ComfortZone
 
-A hybrid Python and JavaScript toolkit for tracking, visualizing, and optimizing your personal environmental comfort metrics. ComfortZone connects to local IoT sensors to monitor temperature, humidity, and ambient noise, combining this data with subjective user inputs to help you find your ideal workspace conditions.
+A hybrid Python and JavaScript toolkit for tracking, visualizing, and optimizing personal environmental comfort metrics. ComfortZone connects to local IoT sensors to monitor temperature, humidity, and ambient noise, combining this hardware data with subjective user inputs to help you find your ideal workspace conditions.
 
 [![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)](https://www.python.org/)
 [![Node 14+](https://img.shields.io/badge/Node-14%2B-green?style=flat-square&logo=node.js)](https://nodejs.org/)
@@ -11,16 +11,16 @@ A hybrid Python and JavaScript toolkit for tracking, visualizing, and optimizing
 
 ## Features
 
-- **Sensor Integration:** Connects to standard IoT thermostats and hygrometers to log ambient temperature and humidity automatically.
+- **Sensor Integration:** Connects to standard IoT thermostats and hygrometers to automatically log ambient temperature and humidity.
 - **Ambient Noise Tracking:** Monitors environmental noise levels to help identify disruptions in your focus and flow states.
 - **Subjective Mood Logging:** A Python CLI tool to manually log your current mood and comfort level alongside the sensor data.
-- **Customizable Dashboard:** A local web dashboard built in Node.js visualizes your metrics and can be customized using `widgets.json`.
+- **Customizable Dashboard:** A local web dashboard built in Node.js that visualizes your metrics and can be customized using `widgets.json`.
 
 ---
 
 ## Getting Started
 
-Ensure you have Python 3.8+ and Node.js 14+ installed on your system before starting.
+**Prerequisites:** Ensure you have Python 3.8+ and Node.js 14+ installed on your system before starting.
 
 1. **Clone the repository**
    ```bash
@@ -54,7 +54,7 @@ Use ComfortZone alongside an IoT thermostat to map your productivity against roo
 ### Zen Mode Integration
 Pair the ambient noise tracker with your morning routine. The dashboard automatically visualizes noise spikes, helping you identify exactly when your environment disrupts your focus.
 
-### Developer Tips
+### Pro Tips
 - **Export often:** Configurations can be set to automatically back up logs weekly. Don't lose your historical tracking data.
 - **Subjective inputs matter:** The optimization algorithm learns your ideal comfort conditions faster when you regularly log manual mood inputs via the CLI.
 - **Dashboard Customization:** Add or rearrange widgets by modifying `widgets.json` to keep your dashboard focused on the metrics you care about most.
@@ -68,6 +68,9 @@ Contributions are welcome! Before opening a pull request, please ensure your loc
 ---
 
 ## Changelog
+
+### 2026-08-08
+- **Docs:** Conducted a full README review, refining feature descriptions and tightening the Quick Start guide for clarity.
 
 ### 2026-08-07
 - **New:** Replaced the theoretical Quantum Comfort Field stub with concrete documentation for the sensor integration and noise tracking features.
