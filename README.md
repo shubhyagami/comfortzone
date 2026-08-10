@@ -52,6 +52,9 @@ Contributions are welcome! Before opening a pull request, please ensure your loc
 
 ## Changelog
 
+### 2026-08-10
+- **Docs:** Streamlined section formatting, refined the project description, and polished the usage tips for clarity.
+
 ### 2026-08-08
 - **Docs:** Conducted a full README review, refining feature descriptions and tightening the Quick Start guide for clarity.
 
