@@ -1,18 +1,18 @@
 # ComfortZone
 
 [![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)](https://www.python.org/)
-[![Node 14+](https://img.shields.io/badge/Node-14%2B-green?style=flat-square&logo=node.js)](https://nodejs.org/)
+[![Node.js 14+](https://img.shields.io/badge/Node.js-14%2B-green?style=flat-square&logo=node.js)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](CONTRIBUTING.md)
 
-A hybrid Python and JavaScript toolkit for tracking, visualizing, and optimizing personal environmental comfort. ComfortZone connects to local IoT sensors to monitor temperature, humidity, and ambient noise, combining this hardware data with subjective user inputs to help you find your ideal workspace conditions.
+ComfortZone is a hybrid Python and JavaScript toolkit for tracking, visualizing, and optimizing personal environmental comfort. It connects to local IoT sensors to monitor temperature, humidity, and ambient noise. By combining this hardware data with subjective user inputs, ComfortZone helps you identify and maintain your ideal workspace conditions.
 
 ## Features
 
-- **Sensor Integration:** Connects to standard IoT thermostats and hygrometers to automatically log ambient temperature and humidity.
+- **Sensor Integration:** Automatically logs ambient temperature and humidity by connecting to standard IoT thermostats and hygrometers.
 - **Ambient Noise Tracking:** Monitors environmental noise levels to help identify disruptions in your focus.
-- **Subjective Mood Logging:** A Python CLI tool to manually log your current mood and comfort level alongside sensor data.
-- **Customizable Dashboard:** A local web dashboard built in Node.js that visualizes metrics and can be customized using `widgets.json`.
+- **Subjective Mood Logging:** A Python CLI tool to manually log your current mood and comfort level alongside the collected sensor data.
+- **Customizable Dashboard:** A local web dashboard built with Node.js that visualizes metrics. Layouts can be customized using the `widgets.json` configuration file.
 
 ## Getting Started
 
@@ -35,22 +35,24 @@ A hybrid Python and JavaScript toolkit for tracking, visualizing, and optimizing
    python -m comfortzone --init
    npm start
    ```
-
    Your local dashboard will be available at `http://localhost:3000`.
 
 ## Usage Tips
 
-- **The "Perfect Temperature" Hunt:** Use ComfortZone alongside an IoT thermostat to map productivity against room temperature. Most users discover their optimal "Goldilocks Zone" is approximately 21.5°C (71°F) with 45% relative humidity.
-- **Zen Mode Integration:** Pair the ambient noise tracker with your morning routine. The dashboard automatically visualizes noise spikes, helping you identify exactly when your environment disrupts focus.
-- **Export often:** Set configurations to automatically back up logs weekly to preserve historical tracking data.
-- **Subjective inputs matter:** The optimization algorithm learns your ideal comfort conditions faster when you regularly log manual mood inputs via the CLI.
-- **Dashboard Customization:** Add or rearrange widgets by modifying `widgets.json` to keep your dashboard focused on the metrics you care about most.
+- **Find Your Goldilocks Zone:** Use ComfortZone alongside an IoT thermostat to map productivity against room temperature. Many users find their optimal workspace is around 21.5°C (71°F) with 45% relative humidity.
+- **Track Focus Disruptions:** Pair the ambient noise tracker with your daily routine. The dashboard visualizes noise spikes, helping you identify exactly when your environment disrupts your focus.
+- **Export Regularly:** Configure the application to back up logs weekly to preserve historical tracking data.
+- **Log Mood Inputs:** The optimization algorithm learns your ideal comfort conditions faster when you regularly log manual mood inputs via the CLI.
+- **Customize Widgets:** Add or rearrange dashboard widgets by modifying `widgets.json` to focus on the metrics that matter most to you.
 
 ## Contributing
 
 Contributions are welcome! Before opening a pull request, please ensure your local branch is up to date with `main`. We use conventional commits to maintain a clear project history (format: `feat: [change]`, `fix: [change]`). Keep your commits focused, and please open an issue to discuss any major refactors before submitting a PR. See `CONTRIBUTING.md` for more details.
 
 ## Changelog
+
+### 2026-08-12
+- **Docs:** Restructured sections for logical flow, improved the project description, and clarified setup and usage instructions.
 
 ### 2026-08-11
 - **Docs:** Cleaned up README formatting, improved section flow, and refined feature descriptions for readability.
