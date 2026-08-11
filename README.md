@@ -52,17 +52,11 @@ Contributions are welcome! Before opening a pull request, please ensure your loc
 
 ## Changelog
 
+### 2026-08-11
+- **Docs:** Cleaned up README formatting, improved section flow, and refined feature descriptions for readability.
+
 ### 2026-08-10
 - **Docs:** Streamlined section formatting, refined the project description, and polished the usage tips for clarity.
 
 ### 2026-08-08
 - **Docs:** Conducted a full README review, refining feature descriptions and tightening the Quick Start guide for clarity.
-
-### 2026-08-07
-- **New:** Replaced the theoretical Quantum Comfort Field stub with concrete documentation for the sensor integration and noise tracking features.
-- **Docs:** Cleaned up README formatting, fixed broken widget configuration instructions, and removed outdated lore.
-- **Docs:** Streamlined the Quick Start guide and updated the feature list.
-
-### 2026-08-05
-- **New:** Added project status badges to the README header.
-- **Docs:** Added initial Quick Start guide and Pro Tips section.
