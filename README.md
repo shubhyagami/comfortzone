@@ -16,7 +16,7 @@ ComfortZone is a hybrid Python and JavaScript toolkit for tracking, visualizing,
 
 ## Getting Started
 
-**Prerequisites:** Ensure you have Python 3.8+ and Node.js 14+ installed before starting.
+**Prerequisites:** Ensure you have Python 3.8+ and Node.js 14+ installed before starting. This project requires read access to your local IoT sensors, so make sure your network permissions allow the dashboard to connect to them.
 
 1. **Clone the repository**
    ```bash
@@ -51,14 +51,11 @@ Contributions are welcome! Before opening a pull request, please ensure your loc
 
 ## Changelog
 
+### 2026-08-19
+- **Docs:** Finalized README polish for clarity, logical flow, and prerequisite notes.
+
 ### 2026-08-12
 - **Docs:** Restructured sections for logical flow, improved the project description, and clarified setup and usage instructions.
 
 ### 2026-08-11
 - **Docs:** Cleaned up README formatting, improved section flow, and refined feature descriptions for readability.
-
-### 2026-08-10
-- **Docs:** Streamlined section formatting, refined the project description, and polished the usage tips for clarity.
-
-### 2026-08-08
-- **Docs:** Conducted a full README review, refining feature descriptions and tightening the Quick Start guide for clarity.
