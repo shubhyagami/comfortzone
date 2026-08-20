@@ -19,6 +19,7 @@ ComfortZone is a hybrid Python and JavaScript toolkit for tracking, visualizing,
 **Prerequisites:** Ensure you have Python 3.8+ and Node.js 14+ installed. This project requires read access to your local IoT sensors, so verify that your network permissions allow the dashboard to connect to them.
 
 **Setup:**
+
 1. **Clone the repository**
    ```bash
    git clone https://github.com/shubhyagami/comfortzone.git
@@ -39,6 +40,8 @@ ComfortZone is a hybrid Python and JavaScript toolkit for tracking, visualizing,
 
 Once running, your local dashboard will be available at `http://localhost:3000`.
 
+> **Note:** If the dashboard fails to load sensor data, verify that your IoT devices are accessible on your local network and that your firewall allows traffic on port 3000.
+
 ## Usage Tips
 
 - **Find Your Goldilocks Zone:** Use ComfortZone alongside an IoT thermostat to map productivity against room temperature. Many users find their optimal workspace is around 21.5°C (71°F) with 45% relative humidity.
@@ -58,7 +61,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Changelog
 
 ### 2026-08-20
-- **Docs:** Reorganized layout, split setup instructions into clear sequential steps, and added a License section.
+- **Docs:** Refined overall README flow, added a troubleshooting note to the Getting Started section, and standardized formatting across sections.
 
 ### 2026-08-19
 - **Docs:** Finalized README polish for clarity, logical flow, and prerequisite notes.
