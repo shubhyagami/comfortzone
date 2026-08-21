@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](CONTRIBUTING.md)
 
-ComfortZone is a hybrid Python and JavaScript toolkit for tracking, visualizing, and optimizing your personal environmental comfort. It connects to local IoT sensors to monitor temperature, humidity, and ambient noise. By combining this hardware data with subjective user inputs, ComfortZone helps you identify and maintain your ideal workspace conditions.
+ComfortZone is a hybrid Python and JavaScript toolkit for tracking, visualizing, and optimizing personal environmental comfort. It connects to local IoT sensors to monitor temperature, humidity, and ambient noise. By combining hardware data with subjective user inputs, ComfortZone helps you identify and maintain your ideal workspace conditions.
 
 ## Features
 
@@ -16,7 +16,7 @@ ComfortZone is a hybrid Python and JavaScript toolkit for tracking, visualizing,
 
 ## Getting Started
 
-**Prerequisites:** Ensure you have Python 3.8+ and Node.js 14+ installed. This project requires read access to your local IoT sensors, so verify that your network permissions allow the dashboard to connect to them.
+**Prerequisites:** Ensure you have Python 3.8+ and Node.js 14+ installed. The project requires read access to local IoT sensors, so verify that your network permissions allow the dashboard to connect to them.
 
 **Setup:**
 
@@ -59,6 +59,9 @@ Contributions are welcome! Before opening a pull request, please ensure your loc
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Changelog
+
+### 2026-08-21
+- **Docs:** Improved README flow, cleaned up section structures, and refined phrasing for clarity.
 
 ### 2026-08-20
 - **Docs:** Refined overall README flow, added a troubleshooting note to the Getting Started section, and standardized formatting across sections.
