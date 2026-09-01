@@ -1,53 +1,62 @@
 # ComfortZone
 
-[![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)](https://www.python.org/)   
-[![Node.js 14+](https://img.shields.io/badge/Node.js-14%2B-green?style=flat-square&logo=node.js)](https://nodejs.org/)   
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)  
-[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](CONTRIBUTING.md)  
-[![Docs](https://img.shields.io/badge/docs-yes-green?style=flat-square)](https://github.com/shubhyagami/comfortzone/blob/main/README.md)  
-[![Version](https://img.shields.io/github/v/release/shubhyagami/comfortzone?include_prereleases&label=version&style=flat-square)](https://github.com/shubhyagami/comfortzone/releases)
+*A lightweight, cross‑language toolkit for monitoring and improving workspace comfort.*
 
 ---
 
-## Quick start
+## 🔖 Badges
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+[![Version](https://img.shields.io/github/v/release/shubhyagami/comfortzone?label=version&style=flat-square)](https://github.com/shubhyagami/comfortzone/releases)
+[![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)](https://www.python.org/)
+[![Node.js 14+](https://img.shields.io/badge/Node.js-14%2B-green?style=flat-square&logo=node.js)](https://nodejs.org/)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
+
+---
+
+## 🚀 Quick start – 5 minutes
 
 ```bash
+# 1️⃣  Clone
 git clone https://github.com/shubhyagami/comfortzone.git
 cd comfortzone
+
+# 2️⃣  Install Python deps
 pip install -r requirements.txt
+
+# 3️⃣  Install Node.js deps
 npm install
-python -m comfortzone --init   # creates default config.yaml and widgets.json
-npm start                      # starts the dashboard on http://localhost:3000
+
+# 4️⃣  Create default config files
+python -m comfortzone --init   # config.yaml + widgets.json
+
+# 5️⃣  Launch the dashboard
+npm start                     # → http://localhost:3000
 ```
 
-Open the dashboard, log a few data points, and you’re ready to see your workspace health in action.
+Open the dashboard, log a few data points with the CLI, and start visualising your workspace health.
 
 ---
 
-## Introduction
+## 📚 What it does
 
-ComfortZone is a lightweight, cross‑language toolkit for monitoring and improving personal workspace comfort.  
-It collects readings from local IoT sensors (temperature, humidity, noise), supplements them with user‑submitted mood scores, and presents the combined data on a local web dashboard. The dashboard is fully customizable and the code is designed to be easily extensible with new sensors or visualisations.
-
----
-
-## Features
-
-- **Continuous environmental recording** – temperature, humidity, and ambient noise are logged automatically.
-- **Mood capture** – a CLI command lets you record a subjective comfort score and optional notes at any time.
-- **Custom web UI** – a simple Node.js‑based dashboard; modify `widgets.json` to change the layout or add widgets.
-- **Correlation analysis** – the tool visualises relationships between environment and mood, helping you spot patterns.
-- **Automated backups** – log files are backed up weekly; schedule and retention policies are configurable via `config.yaml`.
-- **Extensible architecture** – add sensor drivers or new dashboard widgets with minimal effort.
+| Feature | Description |
+|--------|-------------|
+| **Continuous recording** | Logs temperature, humidity and ambient noise automatically. |
+| **Mood capture** | Record a 1‑5 comfort score (plus optional note) via a simple CLI command. |
+| **Customisable UI** | A Node.js dashboard whose layout is defined in `widgets.json`. |
+| **Correlation visualisation** | Shows how environmental factors relate to mood. |
+| **Automated backups** | Weekly log backups, schedule and retention are set in `config.yaml`. |
+| **Extensible** | Add new sensor drivers or dashboard widgets with minimal effort. |
 
 ---
 
-## Installation
+## 🛠️ Installation & setup
 
 ### Prerequisites
 
-* Python 3.8 or newer  
-* Node.js 14 or newer
+- **Python 3.8+** (uses `requirements.txt`)
+- **Node.js 14+** (uses `package.json`)
 
 ### Steps
 
@@ -61,61 +70,55 @@ pip install -r requirements.txt
 
 # Install Node.js dependencies
 npm install
-```
 
-### Configuration
-
-Create the default configuration files:
-
-```bash
+# Generate default configuration files
 python -m comfortzone --init
 ```
 
-This generates:
+You will now have:
 
-* `config.yaml` – main configuration, including backup schedule, retention policy, and driver settings.  
-* `widgets.json` – UI layout for the dashboard.
+- `config.yaml` – main configuration (backup schedule, retention, driver settings).
+- `widgets.json` – dashboard layout.
 
-### Start the dashboard
+### Launch the dashboard
 
 ```bash
 npm start
 ```
 
-The dashboard is available at <http://localhost:3000>.
+Visit <http://localhost:3000> to see the live dashboard.
 
 ---
 
-## Usage
+## 📦 Usage
 
-### Logging sensor data
+### Log sensor data
 
 ```bash
-python -m comfortzone log --temp 22 --humidity 45 --noise 38
+python -m comfortzone log --temp 22.5 --humidity 45 --noise 38
 ```
 
-All values are in the units expected by the sensor drivers (°C, %, dB).
+Values are in the units expected by the sensor drivers (°C, %, dB).
 
-### Recording a mood
+### Record a mood
 
 ```bash
 python -m comfortzone mood --score 4 --note "Focused"
 ```
 
-The `score` is an integer on a 1–5 scale (5 = most comfortable). The optional `note` can describe the context.
+`score` is an integer between 1 (least comfortable) and 5 (most comfortable). The note is optional.
 
-### Editing the dashboard
+### Edit the dashboard
 
-Edit `widgets.json` to add, remove, or rearrange widgets. The changes take effect the next time you reload the dashboard page.
+Modify `widgets.json` to add, remove or rearrange widgets. Reload the page to see changes.
 
-### Backup and retention
+### Backup & retention
 
-Backups are created automatically each week (Sunday by default).  
-Change the schedule or modify retention policies in `config.yaml`:
+Backups run automatically according to the cron expression in `config.yaml`. Example:
 
 ```yaml
 backup:
-  cron: "0 0 * * SUN"   # runs every Sunday at midnight
+  cron: "0 0 * * SUN"   # every Sunday at midnight
 retention:
   logs: 7                # keep logs for 7 days
   backups: 30            # keep backups for 30 days
@@ -123,31 +126,32 @@ retention:
 
 ---
 
-## Tips
+## 💡 Tips
 
-* Pair ComfortZone with a smart thermostat to see how temperature adjustments affect focus.  
-* Use the noise widget to spot irregular spikes that might disturb your work.  
-* Log mood regularly (e.g., before starting a task) to give the analytics engine enough data to learn your ideal environment.
-
----
-
-## Contributing
-
-We welcome contributions!  
-Please keep your feature branch up‑to‑date with `main` before opening a pull request.  
-Follow the conventions described in [CONTRIBUTING.md](CONTRIBUTING.md).  
-All contributions are subject to the MIT License.
+- Pair ComfortZone with a smart thermostat to see how temperature adjustments affect focus.
+- The noise widget can highlight irregular spikes that may disturb work.
+- Logging a mood before each task gives the analytics engine enough data to discover your ideal environment.
 
 ---
 
-## License
+## 🤝 Contributing
+
+We welcome contributions! Please:
+
+1. Keep your branch up‑to‑date with `main` before opening a PR.
+2. Follow the conventions in [CONTRIBUTING.md](CONTRIBUTING.md).
+3. All contributions are licensed under MIT.
+
+---
+
+## 📜 License
 
 MIT © [Shubh Yagami](https://github.com/shubhyagami)
 
 ---
 
-## Changelog
+## 📅 Changelog
 
-* **2026‑09‑01** – Minor README cleanup, added quick‑start guide and refined feature list.  
-* **2026‑08‑30** – Updated badges and introduced `config.yaml` for backup and retention settings.  
-* **2026‑08‑28** – Initial README rewrite and typo corrections.
+- **2026‑09‑01** – Minor README cleanup, added Quick‑start guide and refined feature list.  
+- **2026‑08‑30** – Updated badges, introduced `config.yaml` for backup and retention settings.  
+- **2026‑08‑28** – Initial README rewrite and typo corrections.
