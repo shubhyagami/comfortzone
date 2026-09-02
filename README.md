@@ -4,33 +4,31 @@
 
 ---
 
-## 🔖 Badges
+## Badges
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/github/v/release/shubhyagami/comfortzone?label=version&style=flat-square)](https://github.com/shubhyagami/comfortzone/releases)
-[![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)](https://www.python.org/)
-[![Node.js 14+](https://img.shields.io/badge/Node.js-14%2B-green?style=flat-square&logo=node.js)](https://nodejs.org/)
-[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
+![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)  
+![Version](https://img.shields.io/github/v/release/shubhyagami/comfortzone?label=version&style=flat-square)  
+![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)  
+![Node.js 14+](https://img.shields.io/badge/Node.js-14%2B-green?style=flat-square&logo=node.js)  
+![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)
 
 ---
 
-## 🚀 Quick start – 5 minutes
+## Quick start – 5 minutes
 
 ```bash
-# 1️⃣  Clone
+# 1️⃣ Clone the repository
 git clone https://github.com/shubhyagami/comfortzone.git
 cd comfortzone
 
-# 2️⃣  Install Python deps
+# 2️⃣ Install dependencies
 pip install -r requirements.txt
-
-# 3️⃣  Install Node.js deps
 npm install
 
-# 4️⃣  Create default config files
-python -m comfortzone --init   # config.yaml + widgets.json
+# 3️⃣ Generate default configuration
+python -m comfortzone --init   # creates config.yaml and widgets.json
 
-# 5️⃣  Launch the dashboard
+# 4️⃣ Launch the dashboard
 npm start                     # → http://localhost:3000
 ```
 
@@ -38,47 +36,40 @@ Open the dashboard, log a few data points with the CLI, and start visualising yo
 
 ---
 
-## 📚 What it does
+## What ComfortZone does
 
 | Feature | Description |
-|--------|-------------|
-| **Continuous recording** | Logs temperature, humidity and ambient noise automatically. |
-| **Mood capture** | Record a 1‑5 comfort score (plus optional note) via a simple CLI command. |
+|---------|-------------|
+| **Continuous recording** | Automatically logs temperature, humidity and ambient noise. |
+| **Mood capture** | Record a 1–5 comfort score (and optional note) via a simple CLI command. |
 | **Customisable UI** | A Node.js dashboard whose layout is defined in `widgets.json`. |
 | **Correlation visualisation** | Shows how environmental factors relate to mood. |
-| **Automated backups** | Weekly log backups, schedule and retention are set in `config.yaml`. |
+| **Automated backups** | Weekly log backups with schedule and retention configurable in `config.yaml`. |
 | **Extensible** | Add new sensor drivers or dashboard widgets with minimal effort. |
 
 ---
 
-## 🛠️ Installation & setup
+## Installation & setup
 
 ### Prerequisites
 
-- **Python 3.8+** (uses `requirements.txt`)
-- **Node.js 14+** (uses `package.json`)
+* Python 3.8+ (uses `requirements.txt`)
+* Node.js 14+ (uses `package.json`)
 
 ### Steps
 
 ```bash
-# Clone the repo
 git clone https://github.com/shubhyagami/comfortzone.git
 cd comfortzone
-
-# Install Python dependencies
 pip install -r requirements.txt
-
-# Install Node.js dependencies
 npm install
-
-# Generate default configuration files
 python -m comfortzone --init
 ```
 
-You will now have:
+You’ll now have:
 
-- `config.yaml` – main configuration (backup schedule, retention, driver settings).
-- `widgets.json` – dashboard layout.
+* `config.yaml` – main configuration (backup schedule, retention, driver settings)
+* `widgets.json` – dashboard layout
 
 ### Launch the dashboard
 
@@ -86,11 +77,11 @@ You will now have:
 npm start
 ```
 
-Visit <http://localhost:3000> to see the live dashboard.
+Visit <http://localhost:3000>.
 
 ---
 
-## 📦 Usage
+## Usage
 
 ### Log sensor data
 
@@ -98,7 +89,7 @@ Visit <http://localhost:3000> to see the live dashboard.
 python -m comfortzone log --temp 22.5 --humidity 45 --noise 38
 ```
 
-Values are in the units expected by the sensor drivers (°C, %, dB).
+Units: °C, %, dB.
 
 ### Record a mood
 
@@ -106,11 +97,11 @@ Values are in the units expected by the sensor drivers (°C, %, dB).
 python -m comfortzone mood --score 4 --note "Focused"
 ```
 
-`score` is an integer between 1 (least comfortable) and 5 (most comfortable). The note is optional.
+`score` is an integer from 1 (least comfortable) to 5 (most comfortable). The note is optional.
 
 ### Edit the dashboard
 
-Modify `widgets.json` to add, remove or rearrange widgets. Reload the page to see changes.
+Modify `widgets.json` to add, remove or reorder widgets and reload the page.
 
 ### Backup & retention
 
@@ -126,15 +117,15 @@ retention:
 
 ---
 
-## 💡 Tips
+## Tips
 
-- Pair ComfortZone with a smart thermostat to see how temperature adjustments affect focus.
-- The noise widget can highlight irregular spikes that may disturb work.
-- Logging a mood before each task gives the analytics engine enough data to discover your ideal environment.
+* Pair ComfortZone with a smart thermostat to see how temperature changes affect focus.
+* Use the noise widget to spot irregular spikes that may disturb work.
+* Log a mood before each task to give the analytics engine enough data to discover your ideal environment.
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please:
 
@@ -144,14 +135,14 @@ We welcome contributions! Please:
 
 ---
 
-## 📜 License
+## License
 
 MIT © [Shubh Yagami](https://github.com/shubhyagami)
 
 ---
 
-## 📅 Changelog
+## Changelog
 
-- **2026‑09‑01** – Minor README cleanup, added Quick‑start guide and refined feature list.  
+- **2026‑09‑01** – Minor README cleanup, added quick‑start guide and refined feature list.  
 - **2026‑08‑30** – Updated badges, introduced `config.yaml` for backup and retention settings.  
 - **2026‑08‑28** – Initial README rewrite and typo corrections.
