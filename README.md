@@ -1,90 +1,88 @@
 # ComfortZone
 
-ComfortZone is a lightweight, cross‑language toolkit that records environmental data and mood, visualises their relationship, and keeps the results backed up. It uses Python for data collection and Node.js for a real‑time dashboard.
+ComfortZone is a lightweight, cross‑platform toolkit that records environmental sensor data and mood scores, visualises their relationship in a real‑time dashboard, and keeps the results backed up.  
+Python powers data collection, while Node.js serves the dashboard.
 
----  
+---
 
 ## Badges
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Latest Release](https://img.shields.io/github/v/release/shubhyagami/comfortzone?style=flat-square)](https://github.com/shubhyagami/comfortzone/releases)
-[![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)](https://www.python.org/)
-[![Node.js 14+](https://img.shields.io/badge/Node.js-14%2B-green?style=flat-square&logo=node.js)](https://nodejs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)  
+[![Latest Release](https://img.shields.io/github/v/release/shubhyagami/comfortzone?style=flat-square)](https://github.com/shubhyagami/comfortzone/releases)  
+[![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)](https://www.python.org/)  
+[![Node.js 14+](https://img.shields.io/badge/Node.js-14%2B-green?style=flat-square&logo=node.js)](https://nodejs.org/)  
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 
----  
+---
 
 ## Quick Start (under 5 min)
 
 ```bash
-# 1. Clone
+# 1. Clone the repo
 git clone https://github.com/shubhyagami/comfortzone.git
 cd comfortzone
 
-# 2. Install dependencies
+# 2. Install the Python and Node dependencies
 pip install -r requirements.txt   # Python core
-npm install                       # Front‑end assets
+npm install                     # Front‑end assets
 
-# 3. Generate default config
-python -m comfortzone --init   # creates config.yaml and widgets.json
+# 3. Create the default configuration files
+python -m comfortzone --init   # generates config.yaml and widgets.json
 
 # 4. Launch the dashboard
 npm start   # opens http://localhost:3000
 ```
 
-The dashboard watches `widgets.json`; changes are reflected immediately. Log sensor readings and moods from the CLI, and the view updates in real time.
+The dashboard watches `widgets.json`; any change is reflected immediately.  
+Log sensor readings and moods from the CLI and see the view update in real time.
 
----  
+---
 
 ## Features
 
-| Feature | What it does |
-|---------|---------------|
-| **Continuous logging** | Records temperature, humidity, and ambient noise from connected sensors. |
-| **Mood capture** | Log a 1–5 comfort score and an optional note via the CLI. |
-| **Custom UI** | Define widget layout in `widgets.json`. |
-| **Correlation view** | Visualise how environmental factors affect mood. |
-| **Automated backups** | Weekly log backups; schedule, retention and driver options in `config.yaml`. |
-| **Extensible architecture** | Add new sensor drivers or dashboard widgets with minimal effort. |
+- **Continuous logging** – temperature, humidity, and ambient noise from connected sensors.  
+- **Mood capture** – log a 1–5 comfort score and an optional note via the CLI.  
+- **Custom UI** – layout your widgets in `widgets.json`.  
+- **Correlation view** – visualise how environmental factors affect mood.  
+- **Automated backups** – weekly log backups with configurable schedule and retention.  
+- **Extensible architecture** – add new sensor drivers or dashboard widgets with minimal effort.
 
----  
+---
 
 ## Installation
 
-ComfortZone requires **Python 3.8+** and **Node 14+**.
-
 ```bash
-pip install -r requirements.txt   # Python
-npm install                       # Node.js
+pip install -r requirements.txt   # Python dependencies
+npm install                       # Node.js dependencies
 ```
 
-`requirements.txt` contains only Python libraries; `package.json` lists the UI dependencies.
+> **Prerequisites**: Python 3.8+ and Node.js 14+.
 
----  
+---
 
 ## Configuration
 
 Run `python -m comfortzone --init` once to create the default files:
 
-| File | Purpose |
-|------|---------|
-| `config.yaml` | Core settings – backup schedule, retention policy, driver options. |
-| `widgets.json` | Dashboard layout and widget definitions. |
+| File         | Purpose                                                                 |
+| ------------ | ------------------------------------------------------------------------ |
+| `config.yaml` | Core settings – backup schedule, retention policy, driver options.         |
+| `widgets.json` | Dashboard layout and widget definitions.                                 |
 
-**Example `config.yaml`**
+### Example `config.yaml`
 
 ```yaml
 backup:
   cron: "0 0 * * SUN"   # every Sunday at midnight
-
 retention:
-  logs: 7    # keep logs for 7 days
-  backups: 30   # keep backups for 30 days
+  logs: 7      # keep logs for 7 days
+  backups: 30  # keep backups for 30 days
 ```
 
-Edit the files to suit your environment. The dashboard reloads automatically when `widgets.json` changes.
+Edit these files to fit your environment.  
+Changes to `widgets.json` are hot‑reloaded by the dashboard.
 
----  
+---
 
 ## Usage
 
@@ -94,7 +92,7 @@ Edit the files to suit your environment. The dashboard reloads automatically whe
 python -m comfortzone log --temp 22.5 --humidity 45 --noise 38
 ```
 
-*Units: °C, %, dB (as defined by the sensor drivers).*
+Units: °C, %, dB (defined by the sensor drivers).
 
 ### Record a mood
 
@@ -114,15 +112,15 @@ Edit `widgets.json` to add, remove, or reposition widgets and refresh the page.
 Backups run according to the cron expression in `config.yaml`.  
 The `retention` section controls how long logs and backups are kept.
 
----  
+---
 
 ## Tips
 
-- Pair ComfortZone with a smart thermostat to view how temperature changes influence focus.
-- The noise widget highlights irregular spikes that may disturb work.
+- Pair ComfortZone with a smart thermostat to see how temperature changes influence focus.  
+- The noise widget highlights irregular spikes that may disturb work.  
 - Log a mood before each task; the analytics engine recommends your ideal environment.
 
----  
+---
 
 ## Contributing
 
@@ -132,13 +130,13 @@ Pull requests are welcome.
 2. Follow the style guidelines in [CONTRIBUTING.md](CONTRIBUTING.md).  
 3. All contributions are licensed under MIT.
 
----  
+---
 
 ## License
 
 MIT © [Shubh Yagami](https://github.com/shubhyagami)
 
----  
+---
 
 ## Changelog
 
