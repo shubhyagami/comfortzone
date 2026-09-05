@@ -1,59 +1,63 @@
 # ComfortZone
 
-ComfortZone is a lightweight, cross‑platform toolkit that records environmental sensor data and mood scores, visualises their relationship in a real‑time dashboard, and keeps the results backed up.  
-Python powers data collection, while Node.js serves the dashboard.
+**ComfortZone** is an open‑source, cross‑platform toolkit that logs environmental sensor data (temperature, humidity, ambient noise) and mood scores, visualises their relationship on a live dashboard, and backs up the results automatically.  
+The back‑end is written in Python; the front‑end dashboard is a Node.js SPA.
 
 ---
 
 ## Badges
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)  
-[![Latest Release](https://img.shields.io/github/v/release/shubhyagami/comfortzone?style=flat-square)](https://github.com/shubhyagami/comfortzone/releases)  
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)  
+[![GitHub Release](https://img.shields.io/github/v/release/shubhyagami/comfortzone?style=flat-square)](https://github.com/shubhyagami/comfortzone/releases)  
 [![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)](https://www.python.org/)  
 [![Node.js 14+](https://img.shields.io/badge/Node.js-14%2B-green?style=flat-square&logo=node.js)](https://nodejs.org/)  
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 
 ---
 
-## Quick Start (under 5 min)
+## Quick Start (5 minutes)
 
 ```bash
-# 1. Clone the repo
+# 1. Clone and change into the repository
 git clone https://github.com/shubhyagami/comfortzone.git
 cd comfortzone
 
-# 2. Install the Python and Node dependencies
+# 2. Install dependencies
 pip install -r requirements.txt   # Python core
-npm install                     # Front‑end assets
+npm install                           # Front‑end assets
 
-# 3. Create the default configuration files
-python -m comfortzone --init   # generates config.yaml and widgets.json
+# 3. Create default config files
+python -m comfortzone --init   # → config.yaml & widgets.json
 
-# 4. Launch the dashboard
+# 4. Run the dashboard
 npm start   # opens http://localhost:3000
 ```
 
-The dashboard watches `widgets.json`; any change is reflected immediately.  
-Log sensor readings and moods from the CLI and see the view update in real time.
+The dashboard watches `widgets.json`. Any change is applied instantly.
 
 ---
 
 ## Features
 
-- **Continuous logging** – temperature, humidity, and ambient noise from connected sensors.  
-- **Mood capture** – log a 1–5 comfort score and an optional note via the CLI.  
-- **Custom UI** – layout your widgets in `widgets.json`.  
-- **Correlation view** – visualise how environmental factors affect mood.  
-- **Automated backups** – weekly log backups with configurable schedule and retention.  
-- **Extensible architecture** – add new sensor drivers or dashboard widgets with minimal effort.
+| Feature | Description |
+|---------|-------------|
+| **Continuous logging** | Collect temperature (°C), humidity (%), and ambient noise (dB) from connected sensors. |
+| **Mood capture** | Log a 1‑5 comfort score and optional note via CLI. |
+| **Custom UI** | Arrange widgets in `widgets.json`. |
+| **Correlation view** | Visualise environmental influence on mood in real time. |
+| **Automated backups** | Weekly log backups, configurable via `config.yaml`. |
+| **Extensible** | Add new sensor drivers or dashboard widgets with minimal effort. |
 
 ---
 
 ## Installation
 
 ```bash
-pip install -r requirements.txt   # Python dependencies
-npm install                       # Node.js dependencies
+# Python dependencies
+pip install -r requirements.txt
+
+# Node.js dependencies
+npm install
 ```
 
 > **Prerequisites**: Python 3.8+ and Node.js 14+.
@@ -62,14 +66,14 @@ npm install                       # Node.js dependencies
 
 ## Configuration
 
-Run `python -m comfortzone --init` once to create the default files:
+Run `python -m comfortzone --init` once to generate the default files.
 
-| File         | Purpose                                                                 |
-| ------------ | ------------------------------------------------------------------------ |
-| `config.yaml` | Core settings – backup schedule, retention policy, driver options.         |
-| `widgets.json` | Dashboard layout and widget definitions.                                 |
+| File | Purpose |
+|------|---------|
+| `config.yaml` | Core settings – backup schedule, retention policy, driver options. |
+| `widgets.json` | Dashboard layout and widget definitions. |
 
-### Example `config.yaml`
+### Sample `config.yaml`
 
 ```yaml
 backup:
@@ -79,8 +83,8 @@ retention:
   backups: 30  # keep backups for 30 days
 ```
 
-Edit these files to fit your environment.  
-Changes to `widgets.json` are hot‑reloaded by the dashboard.
+Edit these files to match your environment.  
+`widgets.json` is hot‑reloaded by the dashboard.
 
 ---
 
@@ -92,7 +96,7 @@ Changes to `widgets.json` are hot‑reloaded by the dashboard.
 python -m comfortzone log --temp 22.5 --humidity 45 --noise 38
 ```
 
-Units: °C, %, dB (defined by the sensor drivers).
+Units are °C, %, dB as defined by the sensor drivers.
 
 ### Record a mood
 
@@ -105,7 +109,7 @@ python -m comfortzone mood --score 4 --note "Focused"
 ### Dashboard
 
 Open <http://localhost:3000> after `npm start`.  
-Edit `widgets.json` to add, remove, or reposition widgets and refresh the page.
+Manipulate `widgets.json` to add, remove, or reposition widgets; the page refreshes automatically.
 
 ### Backups & retention
 
@@ -116,9 +120,9 @@ The `retention` section controls how long logs and backups are kept.
 
 ## Tips
 
-- Pair ComfortZone with a smart thermostat to see how temperature changes influence focus.  
-- The noise widget highlights irregular spikes that may disturb work.  
-- Log a mood before each task; the analytics engine recommends your ideal environment.
+- Pair ComfortZone with a smart thermostat to observe how temperature adjustments affect focus.
+- The noise widget highlights irregular dB spikes that may disturb concentration.
+- Log a mood before each task; the analytics engine will suggest your ideal environment.
 
 ---
 
