@@ -1,7 +1,7 @@
 # ComfortZone
 
-**ComfortZone** is a lightweight, cross‑platform toolkit for logging environmental sensor data (temperature, humidity, ambient noise) and mood scores, visualising their relationship on a live dashboard, and backing up the results automatically.  
-The back‑end is written in Python; the front‑end is a Node.js single‑page application.
+**ComfortZone** is a lightweight, cross‑platform toolkit for collecting environmental sensor data (temperature, humidity, ambient noise) and mood scores, visualising their relationships on a live dashboard, and backing up results automatically.  
+The back‑end is written in Python, while the front‑end is a Node.js single‑page application.
 
 ---
 
@@ -15,44 +15,54 @@ The back‑end is written in Python; the front‑end is a Node.js single‑page 
 
 ---
 
-## Getting Started (5 min)
+## Quick start
 
-```bash
-# 1. Clone the repo
-git clone https://github.com/shubhyagami/comfortzone.git
-cd comfortzone
+1. **Clone the repo**
 
-# 2. Install dependencies
-pip install -r requirements.txt   # Python core
-npm install                         # Front‑end assets
+   ```
+   git clone https://github.com/shubhyagami/comfortzone.git
+   cd comfortzone
+   ```
 
-# 3. Generate default configuration
-python -m comfortzone --init   # creates config.yaml & widgets.json
+2. **Install dependencies**
 
-# 4. Run the dashboard
-npm start   # opens http://localhost:3000
-```
+   ```
+   pip install -r requirements.txt   # Python core
+   npm install                        # Front‑end assets
+   ```
+
+3. **Generate default configuration**
+
+   ```
+   python -m comfortzone --init   # creates config.yaml & widgets.json
+   ```
+
+4. **Run the dashboard**
+
+   ```
+   npm start   # opens http://localhost:3000
+   ```
 
 The dashboard watches `widgets.json`. Any change is applied instantly.
 
 ---
 
-## Feature Highlights
+## Features
 
-- **Continuous logging** – collects temperature (°C), humidity (%), and ambient noise (dB).
-- **Mood capture** – log a 1‑5 comfort score and optional note from the CLI.
-- **Customisable UI** – arrange widgets in `widgets.json`; hot‑reloaded by the dashboard.
-- **Real‑time correlation** – visualises how environment affects mood.
-- **Automated backups** – weekly log backups, configurable via `config.yaml`.
+- **Continuous logging** – temperature (°C), humidity (%), ambient noise (dB).  
+- **Mood capture** – integer score (1–5) with optional note.  
+- **Customisable UI** – layout defined in `widgets.json`; hot‑reloaded.  
+- **Real‑time correlation** – visualises how environment affects mood.  
+- **Automated backups** – weekly log backups, configurable via `config.yaml`.  
 - **Extensible** – add new sensor drivers or dashboard widgets with minimal effort.
 
 ---
 
 ## Installation
 
-```bash
+```  
 # Python dependencies
-pip install -r requirements.txt
+pip install -r requirements.txt  
 
 # Node.js dependencies
 npm install
@@ -73,7 +83,7 @@ Run `python -m comfortzone --init` once to generate the default files.
 
 ### Example `config.yaml`
 
-```yaml
+```
 backup:
   cron: "0 0 * * SUN"   # every Sunday at midnight
 retention:
@@ -89,15 +99,15 @@ Edit these files to match your environment. `widgets.json` is hot‑reloaded by 
 
 ### Log sensor data
 
-```bash
+```
 python -m comfortzone log --temp 22.5 --humidity 45 --noise 38
 ```
 
-Units are °C, %, dB as defined by the sensor drivers.
+Units: °C, %, dB as defined by the sensor drivers.
 
 ### Record a mood
 
-```bash
+```
 python -m comfortzone mood --score 4 --note "Focused"
 ```
 
@@ -117,8 +127,8 @@ The `retention` section controls how long logs and backups are kept.
 
 ## Tips
 
-- Pair ComfortZone with a smart thermostat to see how temperature adjustments influence focus.
-- The noise widget highlights irregular dB spikes that may disturb concentration.
+- Pair ComfortZone with a smart thermostat to see how temperature adjustments influence focus.  
+- The noise widget highlights irregular dB spikes that may disturb concentration.  
 - Log a mood before each task; the analytics engine will suggest your ideal environment.
 
 ---
