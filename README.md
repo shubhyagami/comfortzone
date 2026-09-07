@@ -1,68 +1,61 @@
 # ComfortZone
 
-**ComfortZone** is a lightweight, cross‑platform toolkit for collecting environmental sensor data (temperature, humidity, ambient noise) and mood scores, visualising their relationships on a live dashboard, and backing up results automatically.  
-The back‑end is written in Python, while the front‑end is a Node.js single‑page application.
+**ComfortZone** is a lightweight, cross‑platform toolkit that collects environmental sensor data (temperature, humidity, ambient noise) and mood scores, visualises their relationships on a live dashboard, and backs them up automatically.
+
+The back‑end is written in Python, while the front‑end is a single‑page application built with Node.js.
 
 ---
 
-## Badges
+## 🏷 Badges
 
-[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)  
-[![GitHub Release](https://img.shields.io/github/v/release/shubhyagami/comfortzone?style=flat-square)](https://github.com/shubhyagami/comfortzone/releases)  
-[![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)](https://www.python.org/)  
-[![Node.js 14+](https://img.shields.io/badge/Node.js-14%2B-green?style=flat-square&logo=node.js)](https://nodejs.org/)  
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+[![Latest Release](https://img.shields.io/github/v/release/shubhyagami/comfortzone?style=flat-square)](https://github.com/shubhyagami/comfortzone/releases)
+[![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)](https://www.python.org/)
+[![Node.js 14+](https://img.shields.io/badge/Node.js-14%2B-green?style=flat-square&logo=node.js)](https://nodejs.org/)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 
 ---
 
-## Quick start
+## 🚀 Quick Start
 
-1. **Clone the repo**
+```bash
+# 1️⃣ Clone the repo
+git clone https://github.com/shubhyagami/comfortzone.git
+cd comfortzone
 
-   ```
-   git clone https://github.com/shubhyagami/comfortzone.git
-   cd comfortzone
-   ```
+# 2️⃣ Install back‑end dependencies
+pip install -r requirements.txt
 
-2. **Install dependencies**
+# 3️⃣ Install front‑end assets
+npm install
 
-   ```
-   pip install -r requirements.txt   # Python core
-   npm install                        # Front‑end assets
-   ```
+# 4️⃣ Generate default configuration files
+python -m comfortzone --init   # creates config.yaml & widgets.json
 
-3. **Generate default configuration**
-
-   ```
-   python -m comfortzone --init   # creates config.yaml & widgets.json
-   ```
-
-4. **Run the dashboard**
-
-   ```
-   npm start   # opens http://localhost:3000
-   ```
+# 5️⃣ Run the dashboard
+npm start   # opens http://localhost:3000
+```
 
 The dashboard watches `widgets.json`. Any change is applied instantly.
 
 ---
 
-## Features
+## ✨ Features
 
 - **Continuous logging** – temperature (°C), humidity (%), ambient noise (dB).  
 - **Mood capture** – integer score (1–5) with optional note.  
 - **Customisable UI** – layout defined in `widgets.json`; hot‑reloaded.  
-- **Real‑time correlation** – visualises how environment affects mood.  
-- **Automated backups** – weekly log backups, configurable via `config.yaml`.  
+- **Real‑time correlation** – visualises how environmental conditions affect mood.  
+- **Automated backups** – weekly log backups with configurable schedule and retention.  
 - **Extensible** – add new sensor drivers or dashboard widgets with minimal effort.
 
 ---
 
-## Installation
+## 📦 Installation
 
-```  
+```bash
 # Python dependencies
-pip install -r requirements.txt  
+pip install -r requirements.txt
 
 # Node.js dependencies
 npm install
@@ -72,18 +65,18 @@ npm install
 
 ---
 
-## Configuration
+## ⚙️ Configuration
 
-Run `python -m comfortzone --init` once to generate the default files.
+Run `python -m comfortzone --init` once to generate the default configuration files:
 
-| File          | Purpose                                      |
-|---------------|----------------------------------------------|
-| `config.yaml` | Core settings – backup schedule, retention, driver options |
-| `widgets.json`| Dashboard layout and widget definitions     |
+| File          | Purpose |
+|---------------|---------|
+| `config.yaml` | Core settings – backup schedule, retention, driver options. |
+| `widgets.json` | Dashboard layout and widget definitions. |
 
 ### Example `config.yaml`
 
-```
+```yaml
 backup:
   cron: "0 0 * * SUN"   # every Sunday at midnight
 retention:
@@ -95,19 +88,19 @@ Edit these files to match your environment. `widgets.json` is hot‑reloaded by 
 
 ---
 
-## Usage
+## 📚 Usage
 
 ### Log sensor data
 
-```
+```bash
 python -m comfortzone log --temp 22.5 --humidity 45 --noise 38
 ```
 
-Units: °C, %, dB as defined by the sensor drivers.
+Units are defined by the sensor drivers: °C, %, dB.
 
 ### Record a mood
 
-```
+```bash
 python -m comfortzone mood --score 4 --note "Focused"
 ```
 
@@ -115,8 +108,8 @@ python -m comfortzone mood --score 4 --note "Focused"
 
 ### Dashboard
 
-Open <http://localhost:3000> after `npm start`.  
-Manipulate `widgets.json` to add, remove, or reposition widgets; the page refreshes automatically.
+After `npm start`, open <http://localhost:3000>.  
+Modify `widgets.json` to add, remove, or reposition widgets; the page refreshes automatically.
 
 ### Backups & retention
 
@@ -125,15 +118,15 @@ The `retention` section controls how long logs and backups are kept.
 
 ---
 
-## Tips
+## 💡 Tips
 
-- Pair ComfortZone with a smart thermostat to see how temperature adjustments influence focus.  
+- Pair ComfortZone with a smart thermostat to observe how temperature changes influence focus.  
 - The noise widget highlights irregular dB spikes that may disturb concentration.  
 - Log a mood before each task; the analytics engine will suggest your ideal environment.
 
 ---
 
-## Contributing
+## 🤝 Contributing
 
 Pull requests are welcome.
 
@@ -143,14 +136,15 @@ Pull requests are welcome.
 
 ---
 
-## License
+## 📜 License
 
 MIT © [Shubh Yagami](https://github.com/shubhyagami)
 
 ---
 
-## Changelog
+## 🔄 Changelog
 
-- **2026‑09‑01** – Added quick‑start guide, updated feature list.  
+- **2026‑09‑07** – Minor documentation cleanup and typo fixes.  
+- **2026‑09‑01** – Added quick‑start guide and updated feature list.  
 - **2026‑08‑30** – Updated badges; introduced `config.yaml` for backup and retention.  
 - **2026‑08‑28** – Initial README rewrite and typo corrections.
