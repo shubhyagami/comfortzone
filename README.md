@@ -16,58 +16,37 @@ The back‑end is Python‑based, while the front‑end is a single‑page appli
 
 ---
 
-## Getting Started
-
-**Prerequisites**
-
-* Python 3.8+  
-* Node.js 14+ (LTS)
-
-**1. Clone the repository**
+## Quick Start
 
 ```bash
 git clone https://github.com/shubhyagami/comfortzone.git
 cd comfortzone
-```
 
-**2. Install the back‑end dependencies**
-
-```bash
+# Backend
 pip install -r requirements.txt
-```
 
-**3. Install the front‑end assets**
-
-```bash
+# Frontend
 npm install
-```
 
-**4. Generate the default configuration files**
-
-```bash
+# Initialise configuration
 python -m comfortzone --init
-# Creates `config.yaml` and `widgets.json`
-```
 
-**5. Start the dashboard**
-
-```bash
+# Run the dashboard
 npm start
 ```
 
-The dashboard will open at <http://localhost:3000>.  
-Any change to `widgets.json` is hot‑reloaded automatically.
+The dashboard will be available at <http://localhost:3000>. Changes to `widgets.json` are hot‑reloaded automatically.
 
 ---
 
 ## Features
 
-* Continuous logging of temperature (°C), humidity (%), and ambient noise (dB).  
-* Mood capture with a 1–5 score and optional note.  
-* Customisable UI defined in `widgets.json`; live‑reload on file changes.  
-* Real‑time correlation charts showing how environment affects mood.  
-* Automated backups scheduled via cron syntax in `config.yaml`, with configurable retention.  
-* Extensible – add new sensor drivers or dashboard widgets with minimal effort.
+- **Continuous logging** of temperature (°C), humidity (%), and ambient noise (dB).  
+- **Mood capture** with a 1–5 score and optional note.  
+- **Customisable UI** defined in `widgets.json`; live‑reload on edits.  
+- **Real‑time correlation charts** showing how environment affects mood.  
+- **Automated backups** scheduled via cron syntax in `config.yaml`, with configurable retention.  
+- **Extensible** – add new sensor drivers or dashboard widgets with minimal effort.
 
 ---
 
@@ -87,7 +66,7 @@ backup:
   cron: "0 0 * * SUN"   # Execute every Sunday at midnight
 retention:
   logs: 7      # Keep logs for 7 days
-  backups: 30  # Keep backups for 30 days
+  backups: 30 # Keep backups for 30 days
 ```
 
 Edit these files to match your environment. `widgets.json` is hot‑reloaded by the dashboard.
@@ -96,24 +75,24 @@ Edit these files to match your environment. `widgets.json` is hot‑reloaded by 
 
 ## Usage
 
-### Logging sensor data
+### Log sensor data
 
 ```bash
 python -m comfortzone log --temp 22.5 --humidity 45 --noise 38
 ```
 
-* `--temp` – temperature in °C.  
-* `--humidity` – percentage.  
-* `--noise` – noise level in dB.
+- `--temp` – temperature in °C.  
+- `--humidity` – percentage.  
+- `--noise` – noise level in dB.
 
-### Recording a mood
+### Record a mood
 
 ```bash
 python -m comfortzone mood --score 4 --note "Focused"
 ```
 
-* `--score` – integer between 1 (least comfortable) and 5 (most comfortable).  
-* `--note` – optional descriptive text.
+- `--score` – integer between 1 (least comfortable) and 5 (most comfortable).  
+- `--note` – optional descriptive text.
 
 ### Dashboard
 
@@ -129,9 +108,9 @@ The `retention` section controls how long logs and backup archives are kept on d
 
 ## Tips
 
-* Pair ComfortZone with a smart thermostat to observe how temperature changes affect focus or relaxation.  
-* The noise widget highlights irregular dB spikes that may disturb concentration.  
-* Log a mood before every task; the analytics engine can suggest the ideal environment for that activity.
+- Pair ComfortZone with a smart thermostat to see how temperature changes affect focus or relaxation.  
+- The noise widget highlights irregular dB spikes that may disturb concentration.  
+- Log a mood before every task; the analytics engine can suggest the ideal environment for that activity.
 
 ---
 
