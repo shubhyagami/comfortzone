@@ -1,59 +1,60 @@
 # ComfortZone
 
-**ComfortZone** is a lightweight, cross‑platform toolkit that collects environmental sensor data—temperature, humidity, and ambient noise—alongside mood scores.  
-It visualises their relationships on a live dashboard and automatically backs up all logs.
+**ComfortZone** is a lightweight, cross‑platform toolkit that collects environmental sensor data—temperature, humidity, and ambient noise—alongside user‑reported comfort scores.  
+The data is visualized on a live dashboard and automatically backed up.
 
-The back‑end is Python‑based, while the front‑end is a single‑page application built with Node.js.
+- Back‑end: Python 3.8 +
+- Front‑end: Single‑page app built with Node.js 14 +
 
-
+---
 
 ## Badges
 
-[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Latest Release](https://img.shields.io/github/v/release/shubhyagami/comfortzone?style=flat-square)](https://github.com/shubhyagami/comfortzone/releases)
-[![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)](https://www.python.org/)
-[![Node.js 14+](https://img.shields.io/badge/Node.js-14%2B-green?style=flat-square&logo=node.js)](https://nodejs.org/)
-[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
+![License: MIT](https://img.shields.io/github/license/shubhyagami/comfortzone?style=flat-square)
+![Latest Release](https://img.shields.io/github/v/release/shubhyagami/comfortzone?style=flat-square)
+![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)
+![Node.js 14+](https://img.shields.io/badge/Node.js-14%2B-green?style=flat-square&logo=node.js)
+![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)
 
+---
 
-
-## Quick start
+## Getting Started
 
 ```bash
-# Clone the repository
+# 1️⃣  Clone the repository
 git clone https://github.com/shubhyagami/comfortzone.git
 cd comfortzone
 
-# Install back‑end dependencies
+# 2️⃣  Install back‑end dependencies
 pip install -r requirements.txt
 
-# Install front‑end dependencies
+# 3️⃣  Install front‑end dependencies
 npm install
 
-# Initialise default configuration files
+# 4️⃣  Create the default configuration files
 python -m comfortzone --init
 
-# Launch the dashboard
+# 5️⃣  Launch the dashboard
 npm start
 ```
 
-The dashboard will be available at <http://localhost:3000>.  
-Any edit to `widgets.json` is hot‑reloaded automatically.
+The dashboard is reachable at <http://localhost:3000>.  
+The `widgets.json` file is hot‑reloaded on every change.
 
-
+---
 
 ## Features
 
-| Feature | What it does |
-|--------|--------------|
-| Continuous logging | Records temperature (°C), humidity (%), and ambient noise (dB) in real time |
-| Mood capture | Stores a 1–5 comfort score with an optional note |
-| Customisable UI | Dashboard layout and widgets are defined in `widgets.json`; changes reload instantly |
-| Real‑time analytics | Correlation charts show how environment affects mood |
-| Automated backups | Cron‑based schedule in `config.yaml` with configurable retention |
-| Extensible | Add new sensor drivers or dashboard widgets by adding minimal code |
+| Feature | Description |
+|---------|-------------|
+| Real‑time logging | Continuously records temperature (°C), humidity (%), and ambient noise (dB). |
+| Mood capture | Users can submit a 1–5 comfort score, optionally with a note. |
+| Customizable UI | Widgets and layout are defined in `widgets.json`; changes reload instantly. |
+| Analytics dashboard | Correlation charts show how environment variables influence mood. |
+| Automated backups | Cron‑based schedule in `config.yaml` with configurable retention. |
+| Extensible | Add new sensor drivers or widgets by writing minimal Python / JavaScript code. |
 
-
+---
 
 ## Configuration
 
@@ -72,12 +73,12 @@ backup:
 
 retention:
   logs: 7      # Keep logs for 7 days
-  backups: 30  # Keep backups for 30 days
+  backups: 30  # Keep backup archives for 30 days
 ```
 
 Edit the files to match your environment. `widgets.json` is watched by the dashboard and reloaded on every change.
 
-
+---
 
 ## Usage
 
@@ -87,11 +88,11 @@ Edit the files to match your environment. `widgets.json` is watched by the dashb
 python -m comfortzone log --temp 22.5 --humidity 45 --noise 38
 ```
 
-- `--temp` – temperature in °C (required)  
-- `--humidity` – relative humidity in % (required)  
-- `--noise` – ambient noise level in dB (required)
-
-
+| Option      | Description                                            |
+|-------------|--------------------------------------------------------|
+| `--temp`    | Temperature in °C (required)                          |
+| `--humidity`| Relative humidity in % (required)                     |
+| `--noise`  | Ambient noise level in dB (required)                  |
 
 ### Recording a mood
 
@@ -99,32 +100,30 @@ python -m comfortzone log --temp 22.5 --humidity 45 --noise 38
 python -m comfortzone mood --score 4 --note "Focused"
 ```
 
-- `--score` – integer between 1 (least comfortable) and 5 (most comfortable) (required)  
-- `--note` – optional descriptive text
-
-
+| Option | Description                                          |
+|--------|------------------------------------------------------|
+| `--score` | Integer 1–5 (1 = least comfortable, 5 = most) (required) |
+| `--note`  | Optional descriptive text                           |
 
 ### Running the dashboard
 
 After `npm start`, open <http://localhost:3000>.  
-Adjust `widgets.json` to add, remove, or reposition widgets; changes appear instantly.
-
-
+Modify `widgets.json` to add, remove, or reposition widgets; changes appear instantly.
 
 ### Backups & retention
 
 Backups are scheduled according to the cron expression in `config.yaml`.  
-The `retention` section controls how long logs and backup archives are kept on disk.
+The `retention` section specifies how long logs and backup archives are kept on disk.
 
-
+---
 
 ## Tips
 
 - Pair ComfortZone with a smart thermostat to see how temperature changes affect focus or relaxation.  
 - The noise widget highlights irregular dB spikes that may disturb concentration.  
-- Log a mood before every task; the analytics engine can suggest the ideal environment for that activity.
+- Log a mood before starting a task; the analytics engine can suggest the ideal environment for that activity.
 
-
+---
 
 ## Contributing
 
@@ -132,15 +131,15 @@ Pull requests are welcome.
 
 1. Keep your branch up‑to‑date with `main`.  
 2. Follow the coding style guidelines in [CONTRIBUTING.md](CONTRIBUTING.md).  
-3. All contributions are licensed under the MIT licence.
+3. All contributions are licensed under the MIT license.
 
-
+---
 
 ## License
 
 MIT © [Shubh Yagami](https://github.com/shubhyagami)
 
-
+---
 
 ## Changelog
 
