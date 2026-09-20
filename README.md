@@ -1,53 +1,60 @@
 # ComfortZone
 
-**ComfortZone** is a lightweight, cross‑platform toolkit that collects environmental sensor data – temperature, humidity, and ambient noise – together with user‑reported comfort scores. The data is visualised on a live dashboard and automatically backed up.
+ComfortZone is a lightweight, cross‑platform toolkit that collects environmental sensor data (temperature, humidity, ambient noise) alongside user‑reported comfort scores. The data is visualised on an actively‑refreshing dashboard and automatically backed up.
 
-## ⚙️ Prerequisites
+---
 
-| Component | Minimum version | Notes |
-|-----------|-----------------|-------|
-| Python | 3.8+ | Only the back‑end requires Python. |
-| Node.js | 14+ | Required for the dashboard SPA. |
-| npm | 6+ | Included with Node.js. |
-
-> If you prefer a virtual environment for Python:
+## 🚀 Quick Start
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate   # macOS/Linux
-.\.venv\Scripts\activate     # Windows
-```
-
-## 📦 Installation
-
-```bash
-# 1️⃣  Clone the repository
+# 1️⃣  Clone the repo
 git clone https://github.com/shubhyagami/comfortzone.git
 cd comfortzone
 
-# 2️⃣  Install back‑end dependencies
+# 2️⃣  Create a Python virtual environment (recommended)
+python -m venv .venv
+source .venv/bin/activate   # macOS/Linux
+.\.venv\Scripts\activate     # Windows
+
+# 3️⃣  Install back‑end dependencies
 pip install -r requirements.txt
 
-# 3️⃣  Install front‑end dependencies
+# 4️⃣  Install front‑end dependencies
 npm install
-```
 
-## 📁 Configuration
-
-Run the init command once to generate the default files:
-
-```bash
+# 5️⃣  Generate default configuration files
 python -m comfortzone --init
+
+# 6️⃣  Start the live dashboard
+npm start
 ```
 
-The command creates:
+Open <http://localhost:3000> in your browser. The dashboard will auto‑refresh when you edit `widgets.json`.
 
-| File | Purpose |
-|------|---------|
+---
+
+## 📦 Prerequisites
+
+| Component | Minimum version | Notes |
+|-----------|------------------|-------|
+| Python    | 3.8+             | Only the back‑end uses Python. |
+| Node.js   | 14+              | Required for the dashboard SPA. |
+| npm       | 6+               | Bundled with Node.js. |
+
+> **Tip**: If you prefer, skip the virtual‑environment step; the dependencies are lightweight.
+
+---
+
+## ⚙️ Configuration
+
+After the first run, ComfortZone generates two JSON/YAML files:
+
+| File          | Purpose |
+|---------------|---------|
 | `config.yaml` | Core settings: backup schedule, retention, and driver options. |
-| `widgets.json` | Dashboard layout and widget definitions. |
+| `widgets.json`| Dashboard layout and widget definitions. |
 
-**Sample `config.yaml`**
+**Example `config.yaml`**
 
 ```yaml
 backup:
@@ -58,30 +65,9 @@ retention:
   backups: 30 # Keep backup archives for 30 days
 ```
 
-Edit the files to match your environment. The dashboard watches `widgets.json` and reloads instantly when it changes.
+Edit these files to match your environment. The dashboard watches `widgets.json` and reloads instantly on changes.
 
-## 🚀 Quick Start
-
-```bash
-# Generate default config
-python -m comfortzone --init
-
-# Run the live dashboard
-npm start
-```
-
-Open <http://localhost:3000> in a browser. The dashboard auto‑refreshes when you modify `widgets.json`.
-
-## 🔧 Features
-
-| Feature | Description |
-|---------|-------------|
-| **Real‑time logging** | Continuously records temperature (°C), humidity (%), and ambient noise (dB). |
-| **Mood capture** | Users submit a 1–5 comfort score and optional notes. |
-| **Customisable UI** | Define widgets and layout in `widgets.json`; changes take effect immediately. |
-| **Analytics dashboard** | Correlation charts show how environmental factors influence mood. |
-| **Automated backups** | Scheduled via a cron expression in `config.yaml`; retention policies are configurable. |
-| **Extensible** | Add new sensor drivers or widgets with minimal Python/JavaScript changes. |
+---
 
 ## 📌 Usage
 
@@ -91,11 +77,11 @@ Open <http://localhost:3000> in a browser. The dashboard auto‑refreshes when y
 python -m comfortzone log --temp 22.5 --humidity 45 --noise 38
 ```
 
-| Option     | Description                                 |
-|------------|---------------------------------------------|
-| `--temp`   | Temperature in °C (required).               |
-| `--humidity`| Relative humidity in % (required).         |
-| `--noise` | Ambient noise level in dB (required).      |
+| Option       | Description                                 |
+|--------------|---------------------------------------------|
+| `--temp`     | Temperature in °C (required).               |
+| `--humidity` | Relative humidity in % (required).         |
+| `--noise`    | Ambient noise level in dB (required).       |
 
 ### Recording a mood
 
@@ -105,40 +91,61 @@ python -m comfortzone mood --score 4 --note "Focused"
 
 | Option   | Description                                                   |
 |----------|---------------------------------------------------------------|
-| `--score` | Integer 1–5 (1 = least comfortable, 5 = most). Required.     |
-| `--note` | Optional descriptive text.                                   |
+| `--score`| Integer 1–5 (1 = least comfortable, 5 = most). Required.     |
+| `--note` | Optional descriptive text.                                     |
 
-### Running the dashboard
+### Dashboard
 
-After `npm start`, open <http://localhost:3000>. Any changes to `widgets.json` are applied instantly.
+Run `npm start` and visit <http://localhost:3000>. Any changes to `widgets.json` are applied instantly.
 
-### Backups & retention
+### Backups & Retention
 
-Backups run according to the `cron` expression in `config.yaml`. The `retention` section determines how long logs and backup archives are kept.
+Backups execute according to the `cron` expression in `config.yaml`. Retention rules regulate how long logs and backup archives are kept.
+
+---
+
+## 🎛️ Features
+
+- **Real‑time logging** – Continuous collection of temperature, humidity, and noise.
+- **Mood capture** – 1–5 score + optional notes per entry.
+- **Customisable UI** – Define widgets and layout via `widgets.json`.
+- **Analytics dashboard** – Correlation charts linking environment and mood.
+- **Automated backups** – Cron‑scheduled snapshots with configurable retention.
+- **Extensible** – Add sensor drivers or widgets with minimal code.
+
+---
 
 ## 💡 Tips
 
-- Pair ComfortZone with a smart thermostat to observe how temperature changes affect focus or relaxation.
-- The noise widget highlights irregular dB spikes that may disturb concentration.
+- Pair ComfortZone with a smart thermostat to see how temperature changes affect focus or relaxation.
+- The noise widget highlights irregular dB spikes that might disturb concentration.
 - Log a mood before starting a task; the analytics engine can suggest the ideal environment for that activity.
+
+---
 
 ## 🤝 Contributing
 
-Pull requests are welcome!  
-1. Keep your branch updated with `main`.  
-2. Follow the coding style guidelines in [CONTRIBUTING.md](CONTRIBUTING.md).  
+Pull requests are welcome!
+
+1. Keep your branch up‑to‑date with `main`.  
+2. Follow the style guidelines in [CONTRIBUTING.md](CONTRIBUTING.md).  
 3. All contributions are licensed under the MIT license.
+
+---
 
 ## 📜 License
 
 MIT © [Shubh Yagami](https://github.com/shubhyagami)
 
+---
+
 ## 🔄 Changelog
 
-- **2026‑09‑18** – README cleanup and grammar fixes.  
-- **2026‑09‑07** – Minor documentation cleanup.  
-- **2026‑09‑01** – Added quick‑start guide and updated feature list.  
-- **2026‑08‑30** – Updated badges; introduced `config.yaml`.  
+- **2026‑09‑20** – README cleanup, grammar fixes, added quick‑start guide.  
+- **2026‑09‑18** – Minor documentation fixes.  
+- **2026‑09‑07** – Updated feature list.  
+- **2026‑09‑01** – Added quick‑start guide and updated configuration section.  
+- **2026‑08‑30** – Introduced `config.yaml`.  
 - **2026‑08‑28** – Initial README rewrite.
 
 ---
